@@ -4,7 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "client-install": "npm install --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -15,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/vutoan1245/College-Event-Website/issues"
   },
-  "homepage": "https://github.com/vutoan1245/College-Event-Website#readme"
+  "homepage": "https://github.com/vutoan1245/College-Event-Website#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "concurrently": "^5.0.0",
+    "express": "^4.17.1"
+  }
 }
