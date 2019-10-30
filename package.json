@@ -11,7 +11,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "db:remove": "(docker kill docker_mysql_1 || true) && cd ./docker && docker-compose down",
     "db:build": "cd ./docker && docker-compose up -d",
-    "db:rebuild": "yarn run db:remove && yarn run db:build"
+    "db:rebuild": "npm run db:remove && npm run db:build"
   },
   "repository": {
     "type": "git",
