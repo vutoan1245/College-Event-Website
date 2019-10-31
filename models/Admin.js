@@ -1,12 +1,12 @@
-const db = require("../db");
-const Person = require("./Person");
-const Student = require("./Student");
+const db = require('../db');
+const Person = require('./Person');
+const Student = require('./Student');
 class Admin {
   static async findByAid(aid) {
     return db
       .query(`SELECT * FROM admin where aid = ?`, [aid])
-      .them(([row]) => row[0])
-      .catch(err => console.log("[Admin.js]", err));
+      .then(([row]) => row[0])
+      .catch(err => console.log('[Admin.js]', err));
   }
   static async findByUsername(username) {
     const person = await Person.findByUsername(username);

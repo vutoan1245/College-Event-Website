@@ -1,12 +1,12 @@
-const db = require("../db");
-const Person = require("./Person");
+const db = require('../db');
+const Person = require('./Person');
 
 class SuperAdmin {
-  static async findByAid(spid) {
+  static async findBySpid(spid) {
     return db
       .query(`SELECT * FROM super_admin where spid = ?`, [spid])
-      .them(([row]) => row[0])
-      .catch(err => console.log("[SuperAdmin.js]", err));
+      .then(([row]) => row[0])
+      .catch(err => console.log('[SuperAdmin.js]', err));
   }
   static async findByUsername(username) {
     const person = await Person.findByUsername(username);

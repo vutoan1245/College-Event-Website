@@ -1,22 +1,22 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const keys = require("../../config/keys");
-const passport = require("passport");
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const keys = require('../../config/keys');
+const passport = require('passport');
 
-const Student = require("../../models/Student");
+const Student = require('../../models/Student');
 
 const router = express.Router();
 
 // @route   POST api/student/register
 // @desc    Register user
 // @access  Public
-router.post("/register", (req, res) => {
+router.post('/register', (req, res) => {
   const { username, password, firstName, lastName } = req.body;
 
   Student.findByUsername(username).then(user => {
     if (user) {
-      res.status(404).json({ message: "user exists" });
+      res.status(404).json({ message: 'user exists' });
     } else {
       const newStudent = {
         username,
@@ -28,16 +28,16 @@ router.post("/register", (req, res) => {
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, (err, hash) => {
           if (err) {
-            res.status(400).json({ message: "Something went wrong" });
+            res.status(400).json({ message: 'Something went wrong' });
             throw err;
           }
 
           newStudent.password = hash;
 
           Student.add(newStudent)
-            .then(() => res.status(200).json({ message: "Success" }))
+            .then(() => res.status(200).json({ message: 'Success' }))
             .catch(() =>
-              res.status(400).json({ message: "Something went wrong" })
+              res.status(400).json({ message: 'Something went wrong' })
             );
         });
       });
@@ -48,12 +48,15 @@ router.post("/register", (req, res) => {
 // @route   POST api/student/login
 // @desc    Login User / Returning JWT Token
 // @access  Public
-router.post("/login", (req, res) => {
+router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   Student.findByUsername(username).then(user => {
     if (!user) {
-      res.status(400).json({ message: "Incorrect username or password" });
+      res.status(400).json({ message: 'Incorrect username or password' });
+    }
+    if (!user.sid) {
+      res.status(400).json({ message: 'Required permission: Student' });
     }
 
     // Check Password
@@ -73,15 +76,15 @@ router.post("/login", (req, res) => {
           { expiresIn: 3600 },
           (err, token) => {
             if (err) {
-              res.status(400).json({ message: "Something went wrong" });
+              res.status(400).json({ message: 'Something went wrong' });
             }
             res.status(200).json({
-              token: "Bearer " + token
+              token: 'Bearer ' + token
             });
           }
         );
       } else {
-        res.status(400).json({ message: "Incorrect username or password" });
+        res.status(400).json({ message: 'Incorrect username or password' });
       }
     });
   });
@@ -91,11 +94,13 @@ router.post("/login", (req, res) => {
 // @desc    Return current user
 // @access  Private
 router.get(
-  "/current",
-  passport.authenticate("jwt", { session: false }),
+  '/current',
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { sid, pid, first_name, last_name } = req.user;
-
+    if (!sid) {
+      return res.status(400).json({ message: 'Required permission: Student' });
+    }
     res.json({
       sid,
       pid,
