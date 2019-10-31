@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Oct 31, 2019 at 07:30 AM
--- Server version: 8.0.18
+-- Generation Time: Oct 30, 2019 at 12:11 AM
+-- Server version: 5.7.28
 -- PHP Version: 7.2.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -30,18 +30,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `aid` int(11) NOT NULL,
-  `sid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `admin`
---
-
-INSERT INTO `admin` (`aid`, `sid`, `pid`, `first_name`, `last_name`) VALUES
-(3, 1, 2, 'bao', 'hong');
 
 -- --------------------------------------------------------
 
@@ -97,13 +89,6 @@ CREATE TABLE `person` (
   `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `person`
---
-
-INSERT INTO `person` (`pid`, `username`, `password`) VALUES
-(2, 'bao', '$2a$10$.0.XpV.hkfjEXkw6xfulseGvS6MIIOgnbqXSMpliOPxJfERik/FZq');
-
 -- --------------------------------------------------------
 
 --
@@ -147,13 +132,6 @@ CREATE TABLE `students` (
   `last_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `students`
---
-
-INSERT INTO `students` (`sid`, `pid`, `first_name`, `last_name`) VALUES
-(1, 2, 'bao', 'hong');
-
 -- --------------------------------------------------------
 
 --
@@ -163,6 +141,7 @@ INSERT INTO `students` (`sid`, `pid`, `first_name`, `last_name`) VALUES
 CREATE TABLE `super_admin` (
   `spid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -175,7 +154,6 @@ CREATE TABLE `super_admin` (
 
 CREATE TABLE `universities` (
   `uid` int(11) NOT NULL,
-  `spid` int(11) NOT NULL,
   `description` text,
   `student_count` int(11) NOT NULL,
   `picture` varchar(255) DEFAULT NULL,
@@ -192,8 +170,7 @@ CREATE TABLE `universities` (
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`aid`,`sid`),
-  ADD KEY `sid` (`sid`),
+  ADD PRIMARY KEY (`aid`,`pid`),
   ADD KEY `pid` (`pid`);
 
 --
@@ -249,14 +226,14 @@ ALTER TABLE `students`
 --
 ALTER TABLE `super_admin`
   ADD PRIMARY KEY (`spid`,`pid`),
-  ADD KEY `pid` (`pid`);
+  ADD KEY `pid` (`pid`),
+  ADD KEY `uid` (`uid`);
 
 --
 -- Indexes for table `universities`
 --
 ALTER TABLE `universities`
-  ADD PRIMARY KEY (`uid`),
-  ADD KEY `spid` (`spid`);
+  ADD PRIMARY KEY (`uid`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -266,7 +243,7 @@ ALTER TABLE `universities`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -290,7 +267,7 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT for table `person`
 --
 ALTER TABLE `person`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rso`
@@ -308,7 +285,7 @@ ALTER TABLE `rsos_approval`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `super_admin`
@@ -330,8 +307,7 @@ ALTER TABLE `universities`
 -- Constraints for table `admin`
 --
 ALTER TABLE `admin`
-  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`
@@ -363,13 +339,8 @@ ALTER TABLE `students`
 -- Constraints for table `super_admin`
 --
 ALTER TABLE `super_admin`
-  ADD CONSTRAINT `super_admin_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `universities`
---
-ALTER TABLE `universities`
-  ADD CONSTRAINT `universities_ibfk_1` FOREIGN KEY (`spid`) REFERENCES `super_admin` (`spid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `super_admin_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `super_admin_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `universities` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
