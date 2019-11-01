@@ -10,7 +10,7 @@ const University = require('../../models/Universities');
 // @route   POST api/super-admin/register
 // @desc    Register super admin
 // @access  Public
-router.post('/register-super-admin', (req, res) => {
+router.post('/register', (req, res) => {
   const { username, password, firstName, lastName } = req.body;
 
   SuperAdmin.findByUsername(username).then(user => {
