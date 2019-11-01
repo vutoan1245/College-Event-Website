@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 01, 2019 at 02:06 AM
+-- Generation Time: Oct 31, 2019 at 07:30 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.2.23
 
@@ -102,8 +102,7 @@ CREATE TABLE `person` (
 --
 
 INSERT INTO `person` (`pid`, `username`, `password`) VALUES
-(2, 'bao', '$2a$10$.0.XpV.hkfjEXkw6xfulseGvS6MIIOgnbqXSMpliOPxJfERik/FZq'),
-(3, 'bao_super', '$2a$10$gVkI3rrn0b/Y24lkjUuJQe11NISM4WAHAWwnw5D1To0ocvNTn4Af.');
+(2, 'bao', '$2a$10$.0.XpV.hkfjEXkw6xfulseGvS6MIIOgnbqXSMpliOPxJfERik/FZq');
 
 -- --------------------------------------------------------
 
@@ -168,13 +167,6 @@ CREATE TABLE `super_admin` (
   `last_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `super_admin`
---
-
-INSERT INTO `super_admin` (`spid`, `pid`, `first_name`, `last_name`) VALUES
-(1, 3, 'Bao', 'Hong');
-
 -- --------------------------------------------------------
 
 --
@@ -184,21 +176,13 @@ INSERT INTO `super_admin` (`spid`, `pid`, `first_name`, `last_name`) VALUES
 CREATE TABLE `universities` (
   `uid` int(11) NOT NULL,
   `spid` int(11) NOT NULL,
-  `name` varchar(190) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `description` text,
   `student_count` int(11) NOT NULL,
-  `picture` varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `picture` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `longtitude` double DEFAULT NULL,
   `latitude` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `universities`
---
-
-INSERT INTO `universities` (`uid`, `spid`, `name`, `description`, `student_count`, `picture`, `address`, `longtitude`, `latitude`) VALUES
-(1, 1, 'UCF', '1234', 60000, 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.ucf.edu%2Fnews%2Ffiles%2F2019%2F02%2FUCF-Millican-Hall.jpg&imgrefurl=https%3A%2F%2Fwww.ucf.edu%2Fnews%2Fmy-leadership-choice%2F&tbnid=b-neU-DO9ymnXM&vet=12ahUKEwiWkpX5ysflAhUKT1MKHV_QARoQMygAegUIARCFAg..i&docid=OxTHXVsmbL7K0M&w=1200&h=800&q=ucf&ved=2ahUKEwiWkpX5ysflAhUKT1MKHV_QARoQMygAegUIARCFAg', '4000 Central Florida Blvd, Orlando, FL 32816', -81.2033083, 28.5968774);
 
 --
 -- Indexes for dumped tables
@@ -272,7 +256,6 @@ ALTER TABLE `super_admin`
 --
 ALTER TABLE `universities`
   ADD PRIMARY KEY (`uid`),
-  ADD UNIQUE KEY `name` (`name`),
   ADD KEY `spid` (`spid`);
 
 --
@@ -307,7 +290,7 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT for table `person`
 --
 ALTER TABLE `person`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rso`
@@ -331,13 +314,13 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `super_admin`
 --
 ALTER TABLE `super_admin`
-  MODIFY `spid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `spid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `universities`
 --
 ALTER TABLE `universities`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
