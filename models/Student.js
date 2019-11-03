@@ -1,6 +1,6 @@
 const db = require("../db");
 const Person = require("./Person");
-
+const University = require("./Universities");
 class Student {
   static async findBySid(sid) {
     return db
@@ -30,12 +30,13 @@ class Student {
 
   // Add a new student to `person` and `students` tables
   static async add(newStudent) {
-    const { username, password, firstName, lastName } = newStudent;
-
+    const { username, password, firstName, lastName, university } = newStudent;
+    const Uni = await University.findByName(university);
     const pid = await Person.add({ username, password });
+    const uid = Uni.uid;
     db.query(
-      `INSERT INTO students (pid, first_name, last_name) VALUES (?, ?, ?)`,
-      [pid, firstName, lastName]
+      `INSERT INTO students (pid, uid, first_name, last_name) VALUES (?, ?, ?,?)`,
+      [pid, uid, firstName, lastName]
     );
   }
 }
