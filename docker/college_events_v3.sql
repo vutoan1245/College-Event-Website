@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 03, 2019 at 06:12 PM
+-- Generation Time: Nov 01, 2019 at 02:06 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.2.23
 
@@ -31,11 +31,17 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin` (
   `aid` int(11) NOT NULL,
   `sid` int(11) NOT NULL,
-  `uid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`aid`, `sid`, `pid`, `first_name`, `last_name`) VALUES
+(3, 1, 2, 'bao', 'hong');
 
 -- --------------------------------------------------------
 
@@ -60,9 +66,6 @@ CREATE TABLE `events` (
   `eid` int(11) NOT NULL,
   `rid` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `phone` varchar(20) NOT NULL,
-  `email` varchar(190) NOT NULL,
-  `address` varchar(255) NOT NULL,
   `latitude` double NOT NULL,
   `longtitude` double NOT NULL,
   `date` datetime NOT NULL,
@@ -141,11 +144,16 @@ CREATE TABLE `rsos_approval` (
 CREATE TABLE `students` (
   `sid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
-  `uid` int(11) NOT NULL,
   `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
-  `email_address` varchar(190) NOT NULL
+  `last_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`sid`, `pid`, `first_name`, `last_name`) VALUES
+(1, 2, 'bao', 'hong');
 
 -- --------------------------------------------------------
 
@@ -202,8 +210,7 @@ INSERT INTO `universities` (`uid`, `spid`, `name`, `description`, `student_count
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`aid`,`sid`),
   ADD KEY `sid` (`sid`),
-  ADD KEY `pid` (`pid`),
-  ADD KEY `uid` (`uid`);
+  ADD KEY `pid` (`pid`);
 
 --
 -- Indexes for table `comments`
@@ -251,9 +258,7 @@ ALTER TABLE `rsos_approval`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`sid`,`pid`),
-  ADD UNIQUE KEY `email_address` (`email_address`),
-  ADD KEY `pid` (`pid`),
-  ADD KEY `uid` (`uid`);
+  ADD KEY `pid` (`pid`);
 
 --
 -- Indexes for table `super_admin`
@@ -343,8 +348,7 @@ ALTER TABLE `universities`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `admin_ibfk_3` FOREIGN KEY (`uid`) REFERENCES `universities` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`
@@ -370,8 +374,7 @@ ALTER TABLE `rsos_approval`
 -- Constraints for table `students`
 --
 ALTER TABLE `students`
-  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `universities` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `super_admin`
