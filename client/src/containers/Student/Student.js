@@ -10,38 +10,36 @@ import { REMOVE_USER_DATA } from '../../store/action';
 import './Student.css';
 
 function Student(props) {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    let match = useRouteMatch();
+  let match = useRouteMatch();
 
-    const onLogout = () => {
-        dispatch({ type: REMOVE_USER_DATA });
-        props.history.push('/student/login');
-    };
-    return (
-        <BrowserRouter>
-            <div className="student_container">
-                <Switch>
-                    <Route path={`${match.path}/register`}>
-                        <Header />
-                        <Register {...props} />
-                    </Route>
-                    <Route path={`${match.path}/login`}>
-                        <Header />
-                        <Login {...props} />
-                    </Route>
-                    <Route path={match.path}>
-                        <Header>
-                            <p className="logout_btn" onClick={onLogout}>
-                                Logout
-                            </p>
-                        </Header>
-                        <h3>Hello World</h3>
-                    </Route>
-                </Switch>
-            </div>
-        </BrowserRouter>
-    );
+  const onLogout = () => {
+    dispatch({ type: REMOVE_USER_DATA });
+    props.history.push('/student/login');
+  };
+  return (
+    <BrowserRouter>
+      <div className="student_container">
+        <Switch>
+          <Route path={`${match.path}/register`}>
+            <Register {...props} />
+          </Route>
+          <Route path={`${match.path}/login`}>
+            <Login {...props} />
+          </Route>
+          <Route path={match.path}>
+            <Header>
+              <p className="logout_btn" onClick={onLogout}>
+                Logout
+              </p>
+            </Header>
+            <h3>Hello World</h3>
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default Student;
