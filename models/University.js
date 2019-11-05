@@ -4,8 +4,15 @@ class University {
   static async findByUid(uid) {
     return db
       .query(`SELECT * FROM universities WHERE uid = ?`, [uid])
-      .then(row => row[0])
+      .then(([rows]) => rows[0])
       .catch(err => console.log('[Universities.js]', err));
+  }
+
+  static async findNameList() {
+    return db
+      .query(`SELECT name FROM universities`)
+      .then(([rows]) => rows.map(uni => uni.name))
+      .catch(err => console.log(err));
   }
 
   static async findByName(name) {
