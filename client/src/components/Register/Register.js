@@ -15,6 +15,15 @@ function Register(props) {
 
   use;
 
+  const [universityList, setUniversityList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('/api/university/names')
+      .then(result => setUniversityList(result.data))
+      .catch(err => console.error(err));
+  }, []);
+
   const validate = () => {
     return (
       firstName &&
