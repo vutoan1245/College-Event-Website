@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Button, FormGroup, FormControl } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function Register(props) {
   const [firstName, setFirstName] = useState('');
@@ -9,6 +10,10 @@ function Register(props) {
   const [university, setUniversity] = useState();
   const [password, setPassword] = useState('');
   const [rePassword, setRePassord] = useState('');
+
+  const [universityList, setUniversityList] = useState([]);
+
+  use;
 
   const validate = () => {
     return (
@@ -76,7 +81,7 @@ function Register(props) {
             onChange={event => setUniversity(event.target.value)}
           >
             <option value="DEFAULT" disabled>
-              -- select a university --
+              -- select an university --
             </option>
 
             <option value="Hello 1">Test 1</option>
@@ -102,6 +107,9 @@ function Register(props) {
         <Button block bsSize="large" type="submit">
           Login
         </Button>
+        <Form.Label>
+          Aldready have an account? <Link to="/student/login">Login</Link>
+        </Form.Label>
       </Form>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, FormGroup, FormControl } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { ADD_TOKEN } from '../../store/action';
 
@@ -33,27 +34,28 @@ const Login = props => {
       <Form onSubmit={handleSubmit}>
         <h2>Login</h2>
         <FormGroup controlId="email" bsSize="large">
-          <Form.Label>Email address</Form.Label>
-
           <FormControl
             autoFocus
             type="email"
             value={username}
             onChange={e => setUsername(e.target.value)}
+            placeholder="Email"
           />
         </FormGroup>
         <FormGroup controlId="password" bsSize="large">
-          <Form.Label>Password:</Form.Label>
-
           <FormControl
             value={password}
             onChange={e => setPassword(e.target.value)}
             type="password"
+            placeholder="Password"
           />
         </FormGroup>
         <Button block bsSize="large" type="submit">
           Login
         </Button>
+        <Form.Label>
+          Don't have an account? <Link to="/student/register">Register</Link>
+        </Form.Label>
       </Form>
     </div>
   );

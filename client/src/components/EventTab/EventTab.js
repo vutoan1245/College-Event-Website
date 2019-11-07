@@ -31,7 +31,7 @@ function Content() {
 
   return (
     <Container>
-      <h3>Events</h3>
+      <br />
       <Tabs activeKey={key} onSelect={k => setKey(k)}>
         <Tab eventKey="Upcomming" title="Upcomming">
           {eventList.map((event, index) => (
