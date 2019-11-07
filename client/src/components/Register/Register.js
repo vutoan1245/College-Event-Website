@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Form from '../commons/Form/Form';
@@ -13,6 +13,15 @@ function Register(props) {
 
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
+
+  const [universityList, setUniversityList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('/api/university/names')
+      .then(result => setUniversityList(result.data))
+      .catch(err => console.error(err));
+  }, []);
 
   const validate = () => {
     return (
@@ -92,8 +101,11 @@ function Register(props) {
             -- select an option --
           </option>
 
-          <option value="Hello 1">Test 1</option>
-          <option value="Test 2">Test 2</option>
+          {universityList.map(uni => (
+            <option key={uni} value={uni}>
+              {uni}
+            </option>
+          ))}
         </select>
       </div>
 
