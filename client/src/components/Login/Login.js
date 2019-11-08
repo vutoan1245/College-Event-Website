@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Button, FormGroup, FormControl } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
@@ -12,10 +12,21 @@ const Login = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const [error, setError] = useState('');
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setError('');
+  }, [username, password]);
 
   const handleSubmit = event => {
     event.preventDefault();
+
+    if (!username || !password) {
+      setError('Please all fields');
+      return;
+    }
 
     axios
       .post('/api/student/login', { username, password })
@@ -24,25 +35,24 @@ const Login = props => {
         dispatch({ type: ADD_TOKEN, payload: { token } });
         props.history.push('/student');
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
+        setError('Wrong username or password');
       });
   };
 
   return (
-    <div className="Login">
-      <Form onSubmit={handleSubmit}>
+    <div className="form-container">
+      <Form onSubmit={handleSubmit} autoComplete="off">
         <h2>Login</h2>
-        <FormGroup controlId="email" bsSize="large">
+        <FormGroup controlId="email">
           <FormControl
             autoFocus
-            type="email"
             value={username}
             onChange={e => setUsername(e.target.value)}
             placeholder="Email"
           />
         </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
+        <FormGroup controlId="password">
           <FormControl
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -50,12 +60,13 @@ const Login = props => {
             placeholder="Password"
           />
         </FormGroup>
-        <Button block bsSize="large" type="submit">
+        <Button block type="submit">
           Login
         </Button>
         <Form.Label>
           Don't have an account? <Link to="/student/register">Register</Link>
         </Form.Label>
+        {error ? <p className="form-error">{error}</p> : null}
       </Form>
     </div>
   );

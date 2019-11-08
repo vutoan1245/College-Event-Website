@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Container } from 'react-bootstrap';
 
-import Event from './Event';
+import Event from './EventPreview';
 
 const fakeEents = [
   {

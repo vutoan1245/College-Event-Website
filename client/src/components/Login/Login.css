@@ -1,11 +1,19 @@
-@media all and (min-width: 480px) {
-  .Login {
-    padding: 60px 0;
-  }
+.form-container form {
+  margin: 0 auto;
+  max-width: 22rem;
+  text-align: center;
+}
 
-  .Login form {
-    margin: 0 auto;
-    max-width: 320px;
-    text-align: center;
+.form-container .form-error {
+  color: red;
+}
+
+.form-container .form-label {
+  margin: 1rem auto;
+}
+
+@media all and (min-width: 480px) {
+  .form-container {
+    padding: 3rem 0;
   }
 }

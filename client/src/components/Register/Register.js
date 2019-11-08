@@ -13,9 +13,11 @@ function Register(props) {
 
   const [universityList, setUniversityList] = useState([]);
 
-  use;
+  const [error, setError] = useState('');
 
-  const [universityList, setUniversityList] = useState([]);
+  useEffect(() => {
+    setError('');
+  }, [firstName, lastName, email, university, password, rePassword]);
 
   useEffect(() => {
     axios
@@ -25,23 +27,26 @@ function Register(props) {
   }, []);
 
   const validate = () => {
-    return (
-      firstName &&
-      lastName &&
-      email &&
-      university &&
-      password &&
-      password === rePassword
-    );
+    if (password !== rePassword) {
+      setError('Password is not match');
+      return false;
+    }
+    if (!firstName || !lastName || !email || !university || !password) {
+      setError('Please enter all fields');
+      return false;
+    }
+
+    setError('');
+    return true;
   };
 
   const handleSubmit = event => {
     event.preventDefault();
 
-    console.log(university);
     if (!validate()) {
       return;
     }
+
     axios
       .post('/api/student/register', {
         username: email,
@@ -56,33 +61,33 @@ function Register(props) {
   };
 
   return (
-    <div className="Login">
+    <div className="form-container">
       <Form onSubmit={handleSubmit}>
         <h2>Register</h2>
-        <FormGroup bsSize="large">
+        <FormGroup>
           <FormControl
+            autoFocus
             value={firstName}
             onChange={e => setFirstName(e.target.value)}
             placeholder="First Name"
           />
         </FormGroup>
-        <FormGroup bsSize="large">
+        <FormGroup>
           <FormControl
             value={lastName}
             onChange={e => setLastName(e.target.value)}
             placeholder="Last Name"
           />
         </FormGroup>
-        <FormGroup controlId="email" bsSize="large">
+        <FormGroup>
           <FormControl
-            autoFocus
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="Email"
           />
         </FormGroup>
-        <FormGroup bsSize="large">
+        <FormGroup>
           <select
             value={university}
             defaultValue="DEFAULT"
@@ -93,11 +98,14 @@ function Register(props) {
               -- select an university --
             </option>
 
-            <option value="Hello 1">Test 1</option>
-            <option value="Test 2">Test 2</option>
+            {universityList.map((uni, index) => (
+              <option key={index} value={uni}>
+                {uni}
+              </option>
+            ))}
           </select>
         </FormGroup>
-        <FormGroup bsSize="large">
+        <FormGroup>
           <FormControl
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -105,7 +113,7 @@ function Register(props) {
             placeholder="Password"
           />
         </FormGroup>
-        <FormGroup bsSize="large">
+        <FormGroup>
           <FormControl
             value={rePassword}
             onChange={e => setRePassord(e.target.value)}
@@ -113,12 +121,13 @@ function Register(props) {
             placeholder="Confirm Password"
           />
         </FormGroup>
-        <Button block bsSize="large" type="submit">
-          Login
+        <Button block type="submit">
+          Register
         </Button>
-        <Form.Label>
+        <p className="form-label">
           Aldready have an account? <Link to="/student/login">Login</Link>
-        </Form.Label>
+        </p>
+        {error ? <p className="form-error">{error}</p> : null}
       </Form>
     </div>
   );
