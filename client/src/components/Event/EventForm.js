@@ -22,7 +22,6 @@ function EventForm() {
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log(type);
   };
 
   return (
@@ -46,32 +45,54 @@ function EventForm() {
         />
       </Form.Group>
 
-      <Form.Group as={Row}>
-        <Form.Label as="legend" column sm={2}>
-          Type
-        </Form.Label>
-        <Col sm={10} value={type}>
-          <Form.Check
-            type="radio"
-            label="Public"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios1"
-            value={type}
-          />
-          <Form.Check
-            type="radio"
-            label="Private"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios2"
-          />
-          <Form.Check
-            type="radio"
-            label="RSO"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios3"
-          />
-        </Col>
-      </Form.Group>
+      <Form.Row>
+        <Form.Group as={Col}>
+          <Form.Group as={Row}>
+            <Form.Label as="legend" column sm={2}>
+              Type
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Check
+                type="radio"
+                label="Public"
+                name="formHorizontalRadios"
+                id="formHorizontalRadios1"
+                value={type}
+                onClick={() => setType('Public')}
+              />
+              <Form.Check
+                type="radio"
+                label="Private"
+                name="formHorizontalRadios"
+                id="formHorizontalRadios2"
+                onClick={() => setType('Private')}
+              />
+              <Form.Check
+                type="radio"
+                label="RSO"
+                name="formHorizontalRadios"
+                id="formHorizontalRadios3"
+                onClick={() => setType('RSO')}
+              />
+            </Col>
+          </Form.Group>
+        </Form.Group>
+
+        <Form.Group as={Col} controlId="formGridState">
+          {type === 'RSO' ? (
+            <Form.Control
+              as="select"
+              value={state}
+              onChange={e => setState(e.target.value)}
+            >
+              <option>Select a RSO</option>
+              <option>RSO 1</option>
+              <option>RSO 2</option>
+              <option>RSO 3</option>
+            </Form.Control>
+          ) : null}
+        </Form.Group>
+      </Form.Row>
 
       <Form.Row>
         <Form.Group as={Col} controlId="formGridEmail">

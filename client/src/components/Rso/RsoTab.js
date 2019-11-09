@@ -57,14 +57,12 @@ function RsoTabs() {
                 placeholder="Search"
                 className="mr-sm-2"
               />
-              {/* <Button variant="outline-success">Search</Button> */}
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridState">
               <Button variant="outline-success">Search</Button>
             </Form.Group>
           </Form.Row>
-          <br />
 
           {fakeRsoList.map((rso, index) => (
             <RsoPreview
