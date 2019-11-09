@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Container } from 'react-bootstrap';
 
-import Event from './EventPreview';
+import EventReview from './EventPreview';
+import EventForm from './EventForm';
 
 const fakeEents = [
   {
@@ -35,7 +36,7 @@ function Content() {
       <Tabs activeKey={key} onSelect={k => setKey(k)}>
         <Tab eventKey="Upcomming" title="Upcomming">
           {eventList.map((event, index) => (
-            <Event
+            <EventReview
               key={index}
               title={event.title}
               description={event.description}
@@ -45,7 +46,10 @@ function Content() {
         <Tab eventKey="Past" title="Past">
           Hello 2
         </Tab>
-        <Tab eventKey="Request" title="Request"></Tab>
+        <Tab eventKey="Request" title="Request">
+          <br />
+          <EventForm />
+        </Tab>
       </Tabs>
     </Container>
   );

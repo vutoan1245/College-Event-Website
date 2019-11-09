@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Nav, Navbar, Form, Button, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import { REMOVE_USER_DATA } from '../../store/action';
 
@@ -15,10 +16,16 @@ function Header(props) {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">College Events</Navbar.Brand>
+        <Link className="navbar-brand" to="/student">
+          College Events
+        </Link>
         <Nav className="mr-auto">
-          <Nav.Link href="#home">Events</Nav.Link>
-          <Nav.Link href="#features">RSOs</Nav.Link>
+          <Link className="nav-link" to="/student/event">
+            Event
+          </Link>
+          <Link className="nav-link" to="/student/rso">
+            RSO
+          </Link>
         </Nav>
         <Form inline>
           <Button variant="outline-info" onClick={onLogout}>
