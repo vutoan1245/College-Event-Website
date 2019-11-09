@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 01, 2019 at 02:06 AM
+-- Generation Time: Nov 09, 2019 at 03:03 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.2.23
 
@@ -30,18 +30,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `aid` int(11) NOT NULL,
-  `sid` int(11) NOT NULL,
-  `pid` int(11) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL
+  `pid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `admin`
---
-
-INSERT INTO `admin` (`aid`, `sid`, `pid`, `first_name`, `last_name`) VALUES
-(3, 1, 2, 'bao', 'hong');
 
 -- --------------------------------------------------------
 
@@ -64,26 +54,25 @@ CREATE TABLE `comments` (
 
 CREATE TABLE `events` (
   `eid` int(11) NOT NULL,
-  `rid` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `latitude` double NOT NULL,
-  `longtitude` double NOT NULL,
-  `date` datetime NOT NULL,
-  `rating` double NOT NULL,
-  `type` varchar(55) NOT NULL
+  `location` varchar(190) NOT NULL,
+  `time` datetime NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `members`
+-- Table structure for table `location`
 --
 
-CREATE TABLE `members` (
-  `id` int(11) NOT NULL,
-  `sid` int(11) NOT NULL,
-  `rid` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `location` (
+  `lname` varchar(190) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `lng` double NOT NULL,
+  `lat` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -94,16 +83,35 @@ CREATE TABLE `members` (
 CREATE TABLE `person` (
   `pid` int(11) NOT NULL,
   `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL
+  `password` varchar(100) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `email` varchar(190) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `person`
+-- Table structure for table `private_events`
 --
 
-INSERT INTO `person` (`pid`, `username`, `password`) VALUES
-(2, 'bao', '$2a$10$.0.XpV.hkfjEXkw6xfulseGvS6MIIOgnbqXSMpliOPxJfERik/FZq'),
-(3, 'bao_super', '$2a$10$gVkI3rrn0b/Y24lkjUuJQe11NISM4WAHAWwnw5D1To0ocvNTn4Af.');
+CREATE TABLE `private_events` (
+  `eid` int(11) NOT NULL,
+  `aid` int(11) NOT NULL,
+  `spid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `public_events`
+--
+
+CREATE TABLE `public_events` (
+  `eid` int(11) NOT NULL,
+  `aid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -114,46 +122,59 @@ INSERT INTO `person` (`pid`, `username`, `password`) VALUES
 CREATE TABLE `rso` (
   `rid` int(11) NOT NULL,
   `aid` int(11) NOT NULL,
-  `uid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` text NOT NULL
+  `description` text NOT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'inactive'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rsos_approval`
+-- Table structure for table `rso_events`
 --
 
-CREATE TABLE `rsos_approval` (
+CREATE TABLE `rso_events` (
+  `eid` int(11) NOT NULL,
+  `rid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rso_members`
+--
+
+CREATE TABLE `rso_members` (
   `id` int(11) NOT NULL,
   `sid` int(11) NOT NULL,
-  `uid` int(11) NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `rso_name` varchar(255) NOT NULL,
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `students`
---
-
-CREATE TABLE `students` (
-  `sid` int(11) NOT NULL,
-  `pid` int(11) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL
+  `rid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `students`
+-- Triggers `rso_members`
 --
-
-INSERT INTO `students` (`sid`, `pid`, `first_name`, `last_name`) VALUES
-(1, 2, 'bao', 'hong');
+DELIMITER $$
+CREATE TRIGGER `RSOStatusUpdateA` AFTER INSERT ON `rso_members` FOR EACH ROW BEGIN 
+    IF ((SELECT COUNT(*) FROM rso_members M WHERE M.rid = NEW.rid) >  4) 
+    THEN 
+    UPDATE rso 
+    SET rso.status = 'active'    
+    WHERE rso.rid = NEW.rid;
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `RSOStatusUpdateP` AFTER INSERT ON `rso_members` FOR EACH ROW BEGIN 
+    IF ((SELECT COUNT(*) FROM rso_members M WHERE M.rid = NEW.rid) < 5) 
+    THEN 
+    UPDATE rso 
+    SET rso.status = 'active'    
+    WHERE rso.rid = NEW.rid;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -163,17 +184,8 @@ INSERT INTO `students` (`sid`, `pid`, `first_name`, `last_name`) VALUES
 
 CREATE TABLE `super_admin` (
   `spid` int(11) NOT NULL,
-  `pid` int(11) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL
+  `pid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `super_admin`
---
-
-INSERT INTO `super_admin` (`spid`, `pid`, `first_name`, `last_name`) VALUES
-(1, 3, 'Bao', 'Hong');
 
 -- --------------------------------------------------------
 
@@ -182,23 +194,13 @@ INSERT INTO `super_admin` (`spid`, `pid`, `first_name`, `last_name`) VALUES
 --
 
 CREATE TABLE `universities` (
-  `uid` int(11) NOT NULL,
   `spid` int(11) NOT NULL,
   `name` varchar(190) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `description` text,
   `student_count` int(11) NOT NULL,
   `picture` varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `longtitude` double DEFAULT NULL,
-  `latitude` double DEFAULT NULL
+  `location` varchar(190) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `universities`
---
-
-INSERT INTO `universities` (`uid`, `spid`, `name`, `description`, `student_count`, `picture`, `address`, `longtitude`, `latitude`) VALUES
-(1, 1, 'UCF', '1234', 60000, 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.ucf.edu%2Fnews%2Ffiles%2F2019%2F02%2FUCF-Millican-Hall.jpg&imgrefurl=https%3A%2F%2Fwww.ucf.edu%2Fnews%2Fmy-leadership-choice%2F&tbnid=b-neU-DO9ymnXM&vet=12ahUKEwiWkpX5ysflAhUKT1MKHV_QARoQMygAegUIARCFAg..i&docid=OxTHXVsmbL7K0M&w=1200&h=800&q=ucf&ved=2ahUKEwiWkpX5ysflAhUKT1MKHV_QARoQMygAegUIARCFAg', '4000 Central Florida Blvd, Orlando, FL 32816', -81.2033083, 28.5968774);
 
 --
 -- Indexes for dumped tables
@@ -208,8 +210,7 @@ INSERT INTO `universities` (`uid`, `spid`, `name`, `description`, `student_count
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`aid`,`sid`),
-  ADD KEY `sid` (`sid`),
+  ADD PRIMARY KEY (`aid`),
   ADD KEY `pid` (`pid`);
 
 --
@@ -223,42 +224,53 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`eid`),
-  ADD KEY `rid` (`rid`);
+  ADD UNIQUE KEY `location` (`location`);
 
 --
--- Indexes for table `members`
+-- Indexes for table `location`
 --
-ALTER TABLE `members`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `location`
+  ADD PRIMARY KEY (`lname`);
 
 --
 -- Indexes for table `person`
 --
 ALTER TABLE `person`
-  ADD PRIMARY KEY (`pid`);
+  ADD PRIMARY KEY (`pid`),
+  ADD UNIQUE KEY `username` (`username`,`email`);
+
+--
+-- Indexes for table `private_events`
+--
+ALTER TABLE `private_events`
+  ADD PRIMARY KEY (`eid`);
+
+--
+-- Indexes for table `public_events`
+--
+ALTER TABLE `public_events`
+  ADD PRIMARY KEY (`eid`),
+  ADD KEY `aid` (`aid`);
 
 --
 -- Indexes for table `rso`
 --
 ALTER TABLE `rso`
   ADD PRIMARY KEY (`rid`),
-  ADD KEY `aid` (`aid`),
-  ADD KEY `uid` (`uid`);
+  ADD KEY `aid` (`aid`);
 
 --
--- Indexes for table `rsos_approval`
+-- Indexes for table `rso_events`
 --
-ALTER TABLE `rsos_approval`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sid` (`sid`),
-  ADD KEY `uid` (`uid`);
+ALTER TABLE `rso_events`
+  ADD PRIMARY KEY (`eid`),
+  ADD KEY `sid` (`rid`);
 
 --
--- Indexes for table `students`
+-- Indexes for table `rso_members`
 --
-ALTER TABLE `students`
-  ADD PRIMARY KEY (`sid`,`pid`),
-  ADD KEY `pid` (`pid`);
+ALTER TABLE `rso_members`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `super_admin`
@@ -271,9 +283,10 @@ ALTER TABLE `super_admin`
 -- Indexes for table `universities`
 --
 ALTER TABLE `universities`
-  ADD PRIMARY KEY (`uid`),
+  ADD PRIMARY KEY (`spid`),
   ADD UNIQUE KEY `name` (`name`),
-  ADD KEY `spid` (`spid`);
+  ADD KEY `spid` (`spid`),
+  ADD KEY `location` (`location`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -298,12 +311,6 @@ ALTER TABLE `events`
   MODIFY `eid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `members`
---
-ALTER TABLE `members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `person`
 --
 ALTER TABLE `person`
@@ -316,28 +323,22 @@ ALTER TABLE `rso`
   MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `rsos_approval`
+-- AUTO_INCREMENT for table `rso_events`
 --
-ALTER TABLE `rsos_approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `rso_events`
+  MODIFY `eid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `students`
+-- AUTO_INCREMENT for table `rso_members`
 --
-ALTER TABLE `students`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `rso_members`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `super_admin`
 --
 ALTER TABLE `super_admin`
   MODIFY `spid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `universities`
---
-ALTER TABLE `universities`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -347,34 +348,38 @@ ALTER TABLE `universities`
 -- Constraints for table `admin`
 --
 ALTER TABLE `admin`
-  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`rid`) REFERENCES `rso` (`rid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`location`) REFERENCES `location` (`lname`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `private_events`
+--
+ALTER TABLE `private_events`
+  ADD CONSTRAINT `private_events_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `events` (`eid`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `public_events`
+--
+ALTER TABLE `public_events`
+  ADD CONSTRAINT `public_events_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `events` (`eid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `public_events_ibfk_2` FOREIGN KEY (`aid`) REFERENCES `admin` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `rso`
 --
 ALTER TABLE `rso`
-  ADD CONSTRAINT `rso_ibfk_1` FOREIGN KEY (`aid`) REFERENCES `admin` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `rso_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `universities` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `rso_ibfk_1` FOREIGN KEY (`aid`) REFERENCES `admin` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `rsos_approval`
+-- Constraints for table `rso_events`
 --
-ALTER TABLE `rsos_approval`
-  ADD CONSTRAINT `rsos_approval_ibfk_1` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `rsos_approval_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `universities` (`uid`);
-
---
--- Constraints for table `students`
---
-ALTER TABLE `students`
-  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `rso_events`
+  ADD CONSTRAINT `rso_events_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `events` (`eid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `super_admin`
@@ -386,7 +391,8 @@ ALTER TABLE `super_admin`
 -- Constraints for table `universities`
 --
 ALTER TABLE `universities`
-  ADD CONSTRAINT `universities_ibfk_1` FOREIGN KEY (`spid`) REFERENCES `super_admin` (`spid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `universities_ibfk_1` FOREIGN KEY (`spid`) REFERENCES `super_admin` (`spid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `universities_ibfk_2` FOREIGN KEY (`location`) REFERENCES `location` (`lname`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
