@@ -5,13 +5,17 @@ class Event {
     return db
       .query(`SELECT * FROM events WHERE eid = ?`, [eid])
       .then(([row]) => row[0])
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
   }
   static async findByName(name) {
     return db
       .query(`SELECT * FROM events WHERE name = ?`, [name])
       .then(([row]) => row[0])
-      .catch(console.log(err));
+      .catch(err => {
+        throw err;
+      });
   }
   static async add(event) {
     const { name, location, time, category, desciption } = event;

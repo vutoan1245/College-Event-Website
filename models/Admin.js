@@ -7,7 +7,10 @@ class Admin {
     return db
       .query(`SELECT * FROM admin where aid = ?`, [aid])
       .then(([row]) => row[0])
-      .catch(err => console.log("[Admin.js]", err));
+      .catch(err => {
+        console.log("[Admin.js]", err);
+        throw err;
+      });
   }
   static async findByUsername(username) {
     const person = await Person.findByUsername(username);
@@ -20,7 +23,9 @@ class Admin {
     const admin = await db
       .query(`SELECT * from admin where pid = ?`, [person.pid])
       .then(([rows]) => rows[0])
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
 
     return {
       ...person,
@@ -34,13 +39,18 @@ class Admin {
         spid
       ])
       .then(([row]) => row)
-      .catch(err => console.log("Admin status: ", err));
+      .catch(err => {
+        console.log("Admin status: ", err);
+        throw err;
+      });
   }
   static async findByPid(pid) {
     return db
       .query(`SELECT * FROM admin WHERE pid = ?`, [pid])
       .then(([row]) => row[0])
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
   }
   static async add(newAdmin) {
     const { pid, uid } = newAdmin;
@@ -53,7 +63,9 @@ class Admin {
       .query(`INSERT INTO admin (pid, spid) VALUES (?, ?)`, [pid, spid])
       .then(() => this.findByPid(pid))
       .then(admin => admin.aid)
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
   }
   static async delete(aid) {
     db.query(`DELETE FROM admin WHERE aid = ?`, [aid]);

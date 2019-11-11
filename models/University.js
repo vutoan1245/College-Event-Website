@@ -10,14 +10,19 @@ class University {
         [uid]
       )
       .then(([rows]) => rows[0])
-      .catch(err => console.log("[Universities.js]", err));
+      .catch(err => {
+        console.log("[Universities.js]", err);
+        throw err;
+      });
   }
 
   static async findNameList() {
     return db
       .query(`SELECT name FROM universities`)
       .then(([rows]) => rows.map(uni => uni.name))
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
   }
 
   static async findByName(name) {
@@ -28,7 +33,10 @@ class University {
         [name]
       )
       .then(row => row[0])
-      .catch(err => console.log("Search uni by name", err));
+      .catch(err => {
+        console.log("Search uni by name", err);
+        throw err;
+      });
   }
 
   static async add(newUni) {

@@ -10,7 +10,10 @@ class SuperAdmin {
         [spid]
       )
       .then(([row]) => row[0])
-      .catch(err => console.log("[SuperAdmin.js]", err));
+      .catch(err => {
+        console.log("[SuperAdmin.js]", err);
+        throw err;
+      });
   }
   static async findByUsername(username) {
     const person = await Person.findByUsernameA(username, "super admin");
@@ -23,7 +26,9 @@ class SuperAdmin {
     const superAdmin = await db
       .query(`SELECT * from super_admin where pid = ?`, [person.pid])
       .then(([rows]) => rows[0])
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
 
     return {
       ...person,

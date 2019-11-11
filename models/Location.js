@@ -5,13 +5,19 @@ class Location {
     return db
       .query(`SELECT * FROM location WHERE lid=?`, [lid])
       .then(([row]) => row[0])
-      .catch(err => console.log("Location lid: ", err));
+      .catch(err => {
+        console.log("Location lid: ", err);
+        throw err;
+      });
   }
   static async findByLname(lname) {
     return db
       .query(`SELECT * FROM location WHERE lname = ?`, [lname])
       .then(([row]) => row[0])
-      .catch(err => console.log("Location name: ", err));
+      .catch(err => {
+        console.log("Location name: ", err);
+        throw err;
+      });
   }
   static async findByAddress(address) {
     return db
@@ -19,7 +25,10 @@ class Location {
         "%" + address + "%"
       ])
       .then(([row]) => row)
-      .catch(err => console.log("Location address: ", err));
+      .catch(err => {
+        console.log("Location address: ", err);
+        throw err;
+      });
   }
   static async add(location) {
     const { lname, address } = location;
@@ -31,7 +40,9 @@ class Location {
       )
       .then(() => this.findByLname(lname))
       .then(loc => loc.lname)
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
   }
   static async update(location) {
     const { lid, lname, address } = location;
@@ -57,7 +68,9 @@ class Location {
           return res.data.results[0].geometry.location;
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
     return coordinate;
   }
 }
