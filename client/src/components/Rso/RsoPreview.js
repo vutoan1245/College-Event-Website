@@ -11,7 +11,7 @@ const styles = {
   }
 };
 
-function RsoPreview({ title, members, description }) {
+function RsoPreview({ title, members, description, children }) {
   return (
     <Card text="light" border="secondary" style={styles.card}>
       <Card.Body>
@@ -22,7 +22,7 @@ function RsoPreview({ title, members, description }) {
         </Card.Title>
         <Card.Subtitle className="mb-2">{members} members</Card.Subtitle>
         <Card.Text>{description.substring(0, 300) + ' ...'}</Card.Text>
-        <Button>Join</Button>
+        {children}
       </Card.Body>
     </Card>
   );

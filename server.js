@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const path = require('path');
 
 const student = require('./routes/api/student');
 const admin = require('./routes/api/admin');
@@ -22,6 +23,13 @@ app.use('/api/student', student);
 app.use('/api/admin', admin);
 app.use('/api/super-admin', superAdmin);
 app.use('/api/university', university);
+
+// Set static folder
+app.use(express.static('client/build'));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 const port = 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));

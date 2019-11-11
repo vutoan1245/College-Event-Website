@@ -15,6 +15,7 @@ function EventForm() {
   const [time, setTime] = useState(date.getTime());
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [locationName, setLocationName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -131,6 +132,15 @@ function EventForm() {
           />
         </Form.Group>
       </Form.Row>
+
+      <Form.Group controlId="formTitle">
+        <Form.Label>Location Name</Form.Label>
+        <Form.Control
+          value={locationName}
+          placeholder="Enter location name"
+          onChange={e => setLocationName(e.target.value)}
+        />
+      </Form.Group>
 
       <Form.Group controlId="formGridAddress1">
         <Form.Label>Address</Form.Label>

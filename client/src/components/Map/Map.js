@@ -12,8 +12,6 @@ function SimpleMap(props) {
     zoom: 11
   };
 
-  console.log(process.env);
-
   return (
     <div style={props.style}>
       <GoogleMapReact

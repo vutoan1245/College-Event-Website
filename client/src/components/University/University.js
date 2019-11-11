@@ -1,28 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Card, Row, Col, Image } from 'react-bootstrap';
+import { Container, Card, Row, Image } from 'react-bootstrap';
 
 import Map from '../Map/Map';
 
 const styles = {
   mainContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     marginTop: '3rem'
   },
+  uniInfo: {
+    padding: '2rem'
+  },
   uniImg: {
-    width: '15rem'
+    height: '15rem'
   },
   uniStatCard: {
     backgroundColor: 'inherit',
     textAlign: 'center'
   },
   dsptContainer: {
-    marginTop: '3rem'
+    marginTop: '3rem',
+    display: 'flex',
+    flexWrap: 'wrap'
   },
   paragraph: {
-    lineHeight: '30px'
+    lineHeight: '30px',
+    minWidth: '15rem',
+    flex: 1
+  },
+  contactContainer: {
+    margin: '0 2rem'
   },
   map: {
-    width: '100%',
+    width: '15rem',
     height: '15rem'
   }
 };
@@ -38,19 +51,17 @@ function University() {
   }, []);
 
   return (
-    <Container style={styles.mainContainer}>
-      <Row>
-        <Col xs={6} md={4}>
-          <Image
-            src={
-              'https://pbs.twimg.com/profile_images/914280010764230656/FUV7_3r9.jpg'
-            }
-            roundedCircle
-            style={styles.uniImg}
-          />
-        </Col>
-        <Col>
-          <h2>University of Central Florida</h2>
+    <Container>
+      <div style={styles.mainContainer}>
+        <Image
+          src={
+            'https://pbs.twimg.com/profile_images/914280010764230656/FUV7_3r9.jpg'
+          }
+          roundedCircle
+          style={styles.uniImg}
+        />
+        <div style={styles.uniInfo}>
+          <h3>University of Central Florida</h3>
           <Row>
             <Card style={styles.uniStatCard}>
               <Card.Body>
@@ -69,12 +80,13 @@ function University() {
               </Card.Body>
             </Card>
           </Row>
-        </Col>
-      </Row>
-      <Row>
-        <Container style={styles.dsptContainer}>
-          <Row>
-            <Col xs={8} style={styles.paragraph}>
+        </div>
+      </div>
+
+      <>
+        <Container>
+          <div style={styles.dsptContainer}>
+            <div style={styles.paragraph}>
               <p>
                 University of Central Florida is a public institution that was
                 founded in 1963. It has a total undergraduate enrollment of
@@ -107,8 +119,8 @@ function University() {
                 Comedy Central’s "Tosh.0"; and former soccer player Michelle
                 Akers, a member of the National Soccer Hall of Fame.
               </p>
-            </Col>
-            <Col>
+            </div>
+            <div style={styles.contactContainer}>
               <h5>Location:</h5>
               <Map
                 lat={university.latitude}
@@ -118,10 +130,10 @@ function University() {
               <br />
               <h5>Contact:</h5>
               <p>407-823-2000</p>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Container>
-      </Row>
+      </>
     </Container>
   );
 }
