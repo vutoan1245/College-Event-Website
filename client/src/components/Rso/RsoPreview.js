@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 
 const styles = {
   card: {
@@ -22,7 +22,7 @@ function RsoPreview({ title, members, description }) {
         </Card.Title>
         <Card.Subtitle className="mb-2">{members} members</Card.Subtitle>
         <Card.Text>{description.substring(0, 300) + ' ...'}</Card.Text>
-        <Card.Link href="#">Join</Card.Link>
+        <Button>Join</Button>
       </Card.Body>
     </Card>
   );

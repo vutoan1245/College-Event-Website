@@ -6,6 +6,7 @@ import Login from '../../components/Login/Login';
 import Register from '../../components/Register/Register';
 import EventTab from '../../components/Event/EventTab';
 import RsoTab from '../../components/Rso/RsoTab';
+import University from '../../components/University/University';
 
 function Student(props) {
   return (
@@ -27,6 +28,11 @@ function Student(props) {
         <Route path="/student/rso">
           <Header history={props.history} />
           <RsoTab />
+        </Route>
+
+        <Route path="/student">
+          <Header history={props.history} />
+          <University />
         </Route>
       </Switch>
     </BrowserRouter>

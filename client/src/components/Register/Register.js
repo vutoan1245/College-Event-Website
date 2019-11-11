@@ -88,22 +88,19 @@ function Register(props) {
           />
         </FormGroup>
         <FormGroup>
-          <select
-            value={university}
+          <Form.Control
+            as="select"
             defaultValue="DEFAULT"
-            className="form-control"
+            value={university}
             onChange={event => setUniversity(event.target.value)}
           >
             <option value="DEFAULT" disabled>
               -- select an university --
             </option>
-
             {universityList.map((uni, index) => (
-              <option key={index} value={uni}>
-                {uni}
-              </option>
+              <option key={index}>{uni}</option>
             ))}
-          </select>
+          </Form.Control>
         </FormGroup>
         <FormGroup>
           <FormControl
@@ -121,12 +118,15 @@ function Register(props) {
             placeholder="Confirm Password"
           />
         </FormGroup>
+
         <Button block type="submit">
           Register
         </Button>
+
         <p className="form-label">
           Aldready have an account? <Link to="/student/login">Login</Link>
         </p>
+
         {error ? <p className="form-error">{error}</p> : null}
       </Form>
     </div>

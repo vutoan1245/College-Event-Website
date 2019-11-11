@@ -5,7 +5,6 @@ import {
   Container,
   Form,
   FormControl,
-  Col,
   Button
 } from 'react-bootstrap';
 
@@ -41,6 +40,10 @@ const fakeRsoList = [
   }
 ];
 
+const styles = {
+  formGroup: { display: 'flex' }
+};
+
 function RsoTabs() {
   const [key, setKey] = useState('Open');
 
@@ -50,19 +53,10 @@ function RsoTabs() {
       <Tabs activeKey={key} onSelect={k => setKey(k)}>
         <Tab eventKey="Open" title="Open">
           <br />
-          <Form.Row>
-            <Form.Group as={Col}>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="mr-sm-2"
-              />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridState">
-              <Button variant="outline-success">Search</Button>
-            </Form.Group>
-          </Form.Row>
+          <Form.Group style={styles.formGroup}>
+            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+            <Button variant="outline-success">Search</Button>
+          </Form.Group>
 
           {fakeRsoList.map((rso, index) => (
             <RsoPreview
@@ -73,9 +67,11 @@ function RsoTabs() {
             />
           ))}
         </Tab>
+
         <Tab eventKey="My RSOs" title="My RSOs">
           Hello 2
         </Tab>
+
         <Tab eventKey="New" title="New">
           <br />
           <RsoForm />

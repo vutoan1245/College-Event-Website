@@ -85,7 +85,7 @@ function EventForm() {
               value={state}
               onChange={e => setState(e.target.value)}
             >
-              <option>Select a RSO</option>
+              <option disabled>-- Select a RSO --</option>
               <option>RSO 1</option>
               <option>RSO 2</option>
               <option>RSO 3</option>

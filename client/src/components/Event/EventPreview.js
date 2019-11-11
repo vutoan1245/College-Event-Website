@@ -21,7 +21,7 @@ function Event({ title, date, description, internal }) {
         </Card.Title>
         <Card.Subtitle className="mb-2 text-muted">{date}</Card.Subtitle>
         <StarRatings
-          rating={3}
+          rating={Math.random(2) + 4}
           starRatedColor="#5c5c5c"
           starDimension="1rem"
           starSpacing="0.1rem"
