@@ -1,9 +1,20 @@
-const db = require("../db");
+const db = require('../db');
 class RsoMember {
   static async findById(id) {
     return db
       .query(`SELECT * FROM rso_members WHERE id = ?`, [id])
       .then(([row]) => row[0])
+      .catch(err => {
+        throw err;
+      });
+  }
+  static async findByPid(pid) {
+    return db
+      .query(
+        `SELECT * FROM rso_members rm INNER JOIN rso r ON rm.rid = r.rid WHERE rm.pid = ?`,
+        [pid]
+      )
+      .then(([row]) => row)
       .catch(err => {
         throw err;
       });
