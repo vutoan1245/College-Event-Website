@@ -1,4 +1,4 @@
-const db = require("../db");
+const db = require('../db');
 class Rso {
   static async findByRid(rid) {
     return db
@@ -12,6 +12,14 @@ class Rso {
     return db
       .query(`SELECT * FROM rso WHERE name = ?`, [name])
       .then(([row]) => row[0])
+      .catch(err => {
+        throw err;
+      });
+  }
+  static async findByPid(pid) {
+    return db
+      .query(`SELECT * FROM rso WHERE pid = ?`, [pid])
+      .then(([row]) => row)
       .catch(err => {
         throw err;
       });
