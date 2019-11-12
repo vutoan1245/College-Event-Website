@@ -20,15 +20,20 @@ class Event {
   static async add(event) {
     const { name, location, time, category, desciption } = event;
     await Location.findByLname(location.lname).then(loc => {
-      if (loc.length <= 0) {
+      if (loc == undefined) {
         Location.add(location);
       }
     });
 
-    db.query(
-      `INSERT INTO events (name, location, time, category, description) VALUES (?,?,?,?,?)`,
-      [name, location.lname, time, category, desciption]
-    );
+    return db
+      .query(
+        `INSERT INTO events (name, location, time, category, description) VALUES (?,?,?,?,?)`,
+        [name, location.lname, time, category, desciption]
+      )
+      .then(([field]) => field.insertId)
+      .catch(err => {
+        throw err;
+      });
   }
 }
 module.exports = Event;

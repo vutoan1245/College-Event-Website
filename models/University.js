@@ -24,7 +24,14 @@ class University {
         throw err;
       });
   }
-
+  static async findBySpid(spid) {
+    return db
+      .query(`SELECT * FROM universities WHERE spid = ?`, [spid])
+      .then(([rows]) => row)
+      .catch(err => {
+        throw err;
+      });
+  }
   static async findByName(name) {
     return db
       .query(
@@ -54,10 +61,15 @@ class University {
         await Location.add(location);
       }
     });
-    db.query(
-      `INSERT INTO universities (spid, name, description, student_count, picture, location) VALUES (?,?,?,?,?,?)`,
-      [spid, name, description, student_count, picture, location.lname]
-    );
+    return db
+      .query(
+        `INSERT INTO universities (spid, name, description, student_count, picture, location) VALUES (?,?,?,?,?,?)`,
+        [spid, name, description, student_count, picture, location.lname]
+      )
+      .then(([field]) => field.insertId)
+      .catch(err => {
+        throw err;
+      });
   }
 }
 
