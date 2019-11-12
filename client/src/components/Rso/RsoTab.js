@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Tabs, Tab, Container } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Tabs, Tab, Container } from "react-bootstrap";
 
-import RsoForm from './RsoForm';
-import RsoOpen from './RsoOpen';
-import RsoMy from './RsoMy';
+import RsoForm from "./RsoForm";
+import RsoOpen from "./RsoOpen";
+import RsoMy from "./RsoMy";
 
 function RsoTabs() {
-  const [key, setKey] = useState('Open');
+  const [key, setKey] = useState("Open");
 
   return (
     <Container>

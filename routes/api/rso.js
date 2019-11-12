@@ -23,7 +23,6 @@ router.post(
             else {
               Rso.add(newRso)
                 .then(rid => {
-                  console.log(member);
                   Promise.all(
                     member.map(mem => {
                       mem["rid"] = rid;

@@ -1,61 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Container, Card, Row, Image } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Container, Card, Row, Image } from "react-bootstrap";
 
-import Map from '../Map/Map';
+import Map from "../Map/Map";
 
 const styles = {
   mainContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginTop: '3rem'
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginTop: "3rem"
   },
   uniInfo: {
-    padding: '2rem'
+    padding: "2rem"
   },
   uniImg: {
-    height: '15rem'
+    height: "15rem"
   },
   uniStatCard: {
-    backgroundColor: 'inherit',
-    textAlign: 'center'
+    backgroundColor: "inherit",
+    textAlign: "center"
   },
   dsptContainer: {
-    marginTop: '3rem',
-    display: 'flex',
-    flexWrap: 'wrap'
+    marginTop: "3rem",
+    display: "flex",
+    flexWrap: "wrap"
   },
   paragraph: {
-    lineHeight: '30px',
-    minWidth: '15rem',
+    lineHeight: "30px",
+    minWidth: "15rem",
     flex: 1
   },
   contactContainer: {
-    margin: '0 2rem'
+    margin: "0 2rem"
   },
   map: {
-    width: '15rem',
-    height: '15rem'
+    width: "15rem",
+    height: "15rem"
   }
 };
 
-function University() {
+function University({ uid }) {
   const [university, setUniversity] = useState({});
 
   useEffect(() => {
     axios
-      .get('/api/university/1')
+      .get(`/api/super-admin/university/${uid}`)
       .then(result => setUniversity(result.data))
       .catch(err => console.log(err));
-  }, []);
+  }, [uid]);
 
   return (
     <Container>
       <div style={styles.mainContainer}>
         <Image
           src={
-            'https://pbs.twimg.com/profile_images/914280010764230656/FUV7_3r9.jpg'
+            "https://pbs.twimg.com/profile_images/914280010764230656/FUV7_3r9.jpg"
           }
           roundedCircle
           style={styles.uniImg}

@@ -1,14 +1,40 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { Form, Button } from "react-bootstrap";
 
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 function EventForm() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
+  const token = useSelector(state => state.token);
+  const userData = useSelector(state => state.userData);
   const handleSubmit = event => {
     event.preventDefault();
+
+    axios
+      .post(
+        "/api/student/rso/create",
+        {
+          name,
+          description,
+          admin: userData,
+          member: []
+        },
+        {
+          headers: {
+            Authorization: token
+          }
+        }
+      )
+      .then(result => {
+        console.log(result);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
@@ -16,9 +42,9 @@ function EventForm() {
       <Form.Group controlId="formTitle">
         <Form.Label>Title</Form.Label>
         <Form.Control
-          value={title}
+          value={name}
           placeholder="Enter a title"
-          onChange={e => setTitle(e.target.value)}
+          onChange={e => setName(e.target.value)}
         />
       </Form.Group>
 

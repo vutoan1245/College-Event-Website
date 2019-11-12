@@ -1,14 +1,22 @@
-import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import Header from '../../components/Header/Header';
-import Login from '../../components/Login/Login';
-import Register from '../../components/Register/Register';
-import EventTab from '../../components/Event/EventTab';
-import RsoTab from '../../components/Rso/RsoTab';
-import University from '../../components/University/University';
+import Header from "../../components/Header/Header";
+import Login from "../../components/Login/Login";
+import Register from "../../components/Register/Register";
+import EventTab from "../../components/Event/EventTab";
+import RsoTab from "../../components/Rso/RsoTab";
+import University from "../../components/University/University";
 
 function Student(props) {
+  const uid = useSelector(state => state.userData.uid);
+  const token = useSelector(state => state.token);
+
+  if (!token && props.location.pathname !== "/student/login") {
+    return <Redirect to="/student/login" />;
+  }
+
   return (
     <BrowserRouter>
       <Switch>
@@ -32,7 +40,7 @@ function Student(props) {
 
         <Route path="/student">
           <Header history={props.history} />
-          <University />
+          <University uid={uid} />
         </Route>
       </Switch>
     </BrowserRouter>

@@ -1,29 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Form, Col, FormControl } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { Form, Col, FormControl } from "react-bootstrap";
 
-import EventReview from './EventPreview';
+import EventReview from "./EventPreview";
 
 function EventUpcomming() {
   const [eventList, setEventList] = useState([]);
 
-  const [universityList, setUniversityList] = useState([]);
+  const universityList = useSelector(state => state.universityList);
 
   useEffect(() => {
     axios
-      .get('/api/university/names')
-      .then(result => setUniversityList(result.data))
-      .catch(err => console.error(err));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get('https://events.ucf.edu/upcoming/feed.json')
+      .get("https://events.ucf.edu/upcoming/feed.json")
       .then(result => {
         setEventList(result.data);
       })
       .catch(err => console.error(err));
   }, []);
+
   return (
     <>
       <Form.Row>
