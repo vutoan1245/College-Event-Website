@@ -1,9 +1,9 @@
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 
-const Student = require('../models/Student');
-const SuperAdmin = require('../models/SuperAdmin');
-const keys = require('./keys');
+const Student = require("../models/Student");
+const SuperAdmin = require("../models/SuperAdmin");
+const keys = require("./keys");
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -13,8 +13,8 @@ const opts = {
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      if (jwt_payload.sid) {
-        Student.findBySid(jwt_payload.sid)
+      if (jwt_payload.access == "student") {
+        Student.findByPid(jwt_payload.pid)
           .then(user => {
             if (user) {
               return done(null, user);
@@ -22,7 +22,7 @@ module.exports = passport => {
             return done(null, false);
           })
           .catch(err => console.log(err));
-      } else if (jwt_payload.spid) {
+      } else if (jwt_payload.access == "super admin") {
         SuperAdmin.findBySpid(jwt_payload.spid)
           .then(user => {
             if (user) {

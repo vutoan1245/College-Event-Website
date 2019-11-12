@@ -1,68 +1,76 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
 const router = express.Router();
+const Person = require("../../models/Person");
 
-const keys = require('../../config/keys');
-const SuperAdmin = require('../../models/SuperAdmin');
-const University = require('../../models/University');
-
+const keys = require("../../config/keys");
+const SuperAdmin = require("../../models/SuperAdmin");
+const UniversityRoutes = require("./university");
 // @route   POST api/super-admin/register
 // @desc    Register super admin
 // @access  Public
-router.post('/register', (req, res) => {
-  const { username, password, firstName, lastName } = req.body;
+router.post("/register", (req, res) => {
+  const { username, password, first_name, last_name, phone, email } = req.body;
 
-  SuperAdmin.findByUsername(username)
+  Person.findByUsername(username)
     .then(user => {
       if (user) {
-        res.status(404).json({ message: 'user exists' });
+        return res.status(404).json({ message: "user exists" });
       } else {
-        newSuperAdmin = {
-          username,
-          password,
-          firstName,
-          lastName
-        };
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(password, salt, (err, hash) => {
-            if (err) {
-              res.status(400).json({ message: 'Something went wrong' });
-              throw err;
-            }
+        Person.findByUsername(email).then(e => {
+          if (e) {
+            return res.status(404).json({ message: "email exists" });
+          } else {
+            newSuperAdmin = {
+              username,
+              password,
+              first_name,
+              last_name,
+              phone,
+              email
+            };
+            bcrypt.genSalt(10, (err, salt) => {
+              bcrypt.hash(password, salt, (err, hash) => {
+                if (err) {
+                  res.status(400).json({ message: "Something went wrong" });
+                  throw err;
+                }
 
-            newSuperAdmin.password = hash;
+                newSuperAdmin.password = hash;
 
-            SuperAdmin.add(newSuperAdmin)
-              .then(() => res.status(200).json({ message: 'Success' }))
-              .catch(() =>
-                res.status(400).json({ message: 'Something went wrong' })
-              );
-          });
+                SuperAdmin.add(newSuperAdmin)
+                  .then(() => res.status(200).json({ message: "Success" }))
+                  .catch(() =>
+                    res.status(400).json({ message: "Something went wrong" })
+                  );
+              });
+            });
+          }
         });
       }
     })
-    .then(err => {
+    .catch(err => {
       console.log(err);
-      res.status(400).send({ message: 'Something went wrong' });
+      res.status(400).send({ message: "Something went wrong" });
     });
 });
 
 // @route   POST api/super-admin/login
 // @desc    Login User / Returning JWT Token
 // @access  Public
-router.post('/login', (req, res) => {
+router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   SuperAdmin.findByUsername(username)
     .then(user => {
       if (!user) {
-        res.status(400).json({ message: 'Incorrect username or password' });
+        return res
+          .status(400)
+          .json({ message: "Incorrect username or password" });
       }
-      if (!user.spid) {
-        res.status(400).json({ message: 'Required permission: super admin' });
-      }
+
       // Check Password
       bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
@@ -70,7 +78,8 @@ router.post('/login', (req, res) => {
             pid: user.pid,
             spid: user.spid,
             firstName: user.first_name,
-            lastName: user.last_name
+            lastName: user.last_name,
+            access: user.access
           };
 
           // Sign Token
@@ -80,64 +89,27 @@ router.post('/login', (req, res) => {
             { expiresIn: 3600 },
             (err, token) => {
               if (err) {
-                res.status(400).json({ message: 'Something went wrong' });
+                res.status(400).json({ message: "Something went wrong" });
               }
               res.status(200).json({
-                token: 'Bearer ' + token
+                token: "Bearer " + token
               });
             }
           );
         } else {
-          res.status(400).json({ message: 'Incorrect username or password' });
+          res.status(400).json({ message: "Incorrect username or password" });
         }
       });
     })
     .catch(err => {
       console.log(err);
-      res.status(400).send({ message: 'Something went wrong' });
+      res.status(400).send({ message: "Something went wrong" });
     });
 });
 
-// @route   POST api/super-admin/add-university
-// @desc    Create new university profile
-// @access  Public
-router.post(
-  '/add-university',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    const { spid } = req.user;
-    const { name, description, student_count, picture, address } = req.body;
-
-    if (!spid) {
-      return res
-        .status(400)
-        .json({ message: 'Required permission: Super Admin' });
-    }
-    University.findByName(name)
-      .then(uni => {
-        if (uni.length > 0) {
-          res.status(404).json({ message: "University's profile exists" });
-        } else {
-          const newUni = {
-            spid,
-            name,
-            description,
-            student_count,
-            picture,
-            address
-          };
-          University.add(newUni)
-            .then(() => res.status(200).json({ message: 'Success' }))
-            .catch(() =>
-              res.status(400).json({ message: 'Something went wrong' })
-            );
-        }
-      })
-      .then(err => {
-        console.log(err);
-        res.status(400).json({ message: 'Something went wrong' });
-      });
-  }
-);
+// @route   api/super-admin/university
+// @desc    University routes
+// @access  Super Admin
+router.use("/university", UniversityRoutes);
 
 module.exports = router;
