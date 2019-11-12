@@ -1,14 +1,14 @@
-const db = require("../db");
-const Person = require("./Person");
-const Student = require("./Student");
-const University = require("./University");
+const db = require('../db');
+const Person = require('./Person');
+const Student = require('./Student');
+const University = require('./University');
 class Admin {
   static async findByAid(aid) {
     return db
       .query(`SELECT * FROM admin where aid = ?`, [aid])
       .then(([row]) => row[0])
       .catch(err => {
-        console.log("[Admin.js]", err);
+        console.log('[Admin.js]', err);
         throw err;
       });
   }
@@ -40,7 +40,7 @@ class Admin {
       ])
       .then(([row]) => row)
       .catch(err => {
-        console.log("Admin status: ", err);
+        console.log('Admin status: ', err);
         throw err;
       });
   }

@@ -1,5 +1,5 @@
-const db = require("../db");
-const Location = require("./Location");
+const db = require('../db');
+const Location = require('./Location');
 class Event {
   static async findByEid(eid) {
     return db

@@ -1,4 +1,4 @@
-const db = require("../db");
+const db = require('../db');
 class RsoEvent {
   static async findByEid(eid) {
     return db
@@ -10,6 +10,7 @@ class RsoEvent {
       .then(([row]) => row[0])
       .catch(err => console.log(err));
   }
+
   static async findByName(name) {
     return db
       .query(

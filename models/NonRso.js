@@ -1,5 +1,5 @@
-const db = require("../db");
-const University = require("./University");
+const db = require('../db');
+const University = require('./University');
 class NonRso {
   static async findByEid(eid) {
     return db

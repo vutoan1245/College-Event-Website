@@ -1,4 +1,4 @@
-const db = require("../db");
+const db = require('../db');
 class Comment {
   static async findByCid(cid) {
     return db

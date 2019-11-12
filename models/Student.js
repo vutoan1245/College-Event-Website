@@ -1,6 +1,6 @@
-const db = require("../db");
-const Person = require("./Person");
-const University = require("./University");
+const db = require('../db');
+const Person = require('./Person');
+const University = require('./University');
 class Student {
   static async findByPid(pid) {
     return db
@@ -10,11 +10,11 @@ class Student {
         [pid]
       )
       .then(([rows]) => rows[0])
-      .catch(err => console.log("[Student.js]", err));
+      .catch(err => console.log('[Student.js]', err));
   }
 
   static async findByUsername(username) {
-    const person = await Person.findByUsernameA(username, "student");
+    const person = await Person.findByUsernameA(username, 'student');
 
     // Does not exist
     if (!person) {
@@ -63,7 +63,7 @@ class Student {
       last_name,
       phone,
       email,
-      access: "student"
+      access: 'student'
     });
     const uni = await University.findByName(university);
 

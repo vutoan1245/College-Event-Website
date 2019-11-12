@@ -1,12 +1,12 @@
-const db = require("../db");
-const axios = require("axios");
+const db = require('../db');
+const axios = require('axios');
 class Location {
   static async findByLid(lid) {
     return db
       .query(`SELECT * FROM location WHERE lid=?`, [lid])
       .then(([row]) => row[0])
       .catch(err => {
-        console.log("Location lid: ", err);
+        console.log('Location lid: ', err);
         throw err;
       });
   }
@@ -15,18 +15,18 @@ class Location {
       .query(`SELECT * FROM location WHERE lname = ?`, [lname])
       .then(([row]) => row[0])
       .catch(err => {
-        console.log("Location name: ", err);
+        console.log('Location name: ', err);
         throw err;
       });
   }
   static async findByAddress(address) {
     return db
       .query(`SELECT * FROM location WHERE address LIKE ?`, [
-        "%" + address + "%"
+        '%' + address + '%'
       ])
       .then(([row]) => row)
       .catch(err => {
-        console.log("Location address: ", err);
+        console.log('Location address: ', err);
         throw err;
       });
   }
@@ -58,7 +58,7 @@ class Location {
   }
   static async geoCode(address) {
     const gecodeURL =
-      process.env.GEOCODE_URL + address + "&key=" + process.env.GOOGLE_KEY;
+      process.env.GEOCODE_URL + address + '&key=' + process.env.GOOGLE_KEY;
 
     //Convert address to coordinates
     const coordinate = await axios

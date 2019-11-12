@@ -1,5 +1,5 @@
-const db = require("../db");
-const Location = require("./Location");
+const db = require('../db');
+const Location = require('./Location');
 
 class University {
   static async findByUid(uid) {
@@ -11,7 +11,7 @@ class University {
       )
       .then(([rows]) => rows[0])
       .catch(err => {
-        console.log("[Universities.js]", err);
+        console.log('[Universities.js]', err);
         throw err;
       });
   }
@@ -41,7 +41,7 @@ class University {
       )
       .then(row => row[0])
       .catch(err => {
-        console.log("Search uni by name", err);
+        console.log('Search uni by name', err);
         throw err;
       });
   }

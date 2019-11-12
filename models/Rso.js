@@ -16,14 +16,7 @@ class Rso {
         throw err;
       });
   }
-  static async findByPid(pid) {
-    return db
-      .query(`SELECT * FROM rso WHERE pid = ?`, [pid])
-      .then(([row]) => row)
-      .catch(err => {
-        throw err;
-      });
-  }
+
   static async findByUid(uid) {
     return db
       .query(

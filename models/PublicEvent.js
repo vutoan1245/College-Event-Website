@@ -1,4 +1,4 @@
-const db = require("./db");
+const db = require('./db');
 class PublicEvent {
   static async findByEid(eid) {
     return db
