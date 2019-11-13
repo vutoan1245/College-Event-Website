@@ -18,17 +18,28 @@ class Event {
       });
   }
   static async add(event) {
-    const { name, location, time, category, desciption } = event;
-    await Location.findByLname(location.lname).then(loc => {
-      if (loc.length <= 0) {
-        Location.add(location);
-      }
-    });
+    const { name, location, time, category, description } = event;
+    await Location.findByLname(location.lname)
+      .then(loc => {
+        if (!loc) {
+          Location.add(location);
+        }
+      })
+      .catch(err => {
+        console.log("[Event.js] add", err);
+        throw err;
+      });
 
-    db.query(
-      `INSERT INTO events (name, location, time, category, description) VALUES (?,?,?,?,?)`,
-      [name, location.lname, time, category, desciption]
-    );
+    return db
+      .query(
+        `INSERT INTO events (name, location, time, category, description) VALUES (?,?,?,?,?)`,
+        [name, location.lname, time, category, description]
+      )
+      .then(([fields]) => fields.insertId)
+      .catch(err => {
+        console.log("[Event.js] add", err);
+        throw err;
+      });
   }
 }
 module.exports = Event;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 11, 2019 at 05:06 PM
+-- Generation Time: Nov 12, 2019 at 12:22 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.2.23
 
@@ -42,7 +42,23 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` (`aid`, `pid`, `spid`, `status`) VALUES
 (4, 11, 3, 'inactive'),
 (5, 11, 3, 'inactive'),
-(6, 11, 3, 'inactive');
+(6, 11, 3, 'inactive'),
+(7, 11, 3, 'inactive'),
+(8, 11, 3, 'inactive'),
+(9, 11, 3, 'inactive'),
+(10, 11, 3, 'inactive'),
+(11, 11, 3, 'inactive'),
+(12, 11, 3, 'inactive'),
+(13, 11, 3, 'inactive'),
+(14, 11, 3, 'inactive'),
+(15, 11, 3, 'inactive'),
+(16, 11, 3, 'inactive'),
+(17, 11, 3, 'inactive'),
+(18, 11, 3, 'inactive'),
+(19, 11, 3, 'inactive'),
+(20, 11, 3, 'inactive'),
+(21, 11, 3, 'inactive'),
+(22, 11, 3, 'inactive');
 
 -- --------------------------------------------------------
 
@@ -73,6 +89,14 @@ CREATE TABLE `events` (
   `category` varchar(255) NOT NULL,
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`eid`, `name`, `location`, `time`, `category`, `description`) VALUES
+(1, 'bruh', 'UCF', '2019-11-12 00:00:00', '', ''),
+(2, 'ertet', 'UCF', '2019-11-12 00:00:00', '', '');
 
 -- --------------------------------------------------------
 
@@ -132,7 +156,8 @@ CREATE TABLE `person` (
 INSERT INTO `person` (`pid`, `username`, `password`, `first_name`, `last_name`, `phone`, `email`, `access`) VALUES
 (6, 'bao', '$2a$10$lcBCkO6nliVYpkyj/Iy3Ze7E4Uv9iPDLT9rVVAXzw.Jor31pUc/am', 'bao', 'hong', '3214408647', 'baohong@knights.ucf.edu', 'super admin'),
 (11, 'bao_student', '$2a$10$UhgUPFoQamzOhE5TQ3oIs.BT2RXCYI9GXcV2/H283V3QrwhH7FdH2', 'bao', 'hong', '3214408647', 'baohong123@knights.ucf.edu', 'student'),
-(13, 'bao_student1', '$2a$10$gXUiF/4vQl0qV.0zFONiNOuhsz8WrWa0Pavod/ruZq.7WAxaThoRa', 'bao', 'hong', '3214408647', 'baohong1223@knights.ucf.edu', 'student');
+(13, 'bao_student1', '$2a$10$gXUiF/4vQl0qV.0zFONiNOuhsz8WrWa0Pavod/ruZq.7WAxaThoRa', 'bao', 'hong', '3214408647', 'baohong1223@knights.ucf.edu', 'student'),
+(14, 'bao_student6', '$2a$10$XRGDFCeV08Gm3lpM6myhV.oINen7k44TRgrXKa.dddIbnjmy7TaTm', 'bao', 'hong', '3214408647', 'baohong23@knights.ucf.edu', 'student');
 
 -- --------------------------------------------------------
 
@@ -176,7 +201,7 @@ CREATE TABLE `rso` (
 --
 
 INSERT INTO `rso` (`rid`, `aid`, `name`, `description`, `status`) VALUES
-(3, 4, 'Startdust Crusader', 'reeee', 'inactive');
+(17, 4, 'Startdust Crusader', 'reeee', 'inactive');
 
 -- --------------------------------------------------------
 
@@ -202,6 +227,14 @@ CREATE TABLE `rso_members` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Dumping data for table `rso_members`
+--
+
+INSERT INTO `rso_members` (`id`, `pid`, `rid`) VALUES
+(4, 13, 17),
+(5, 11, 17);
+
+--
 -- Triggers `rso_members`
 --
 DELIMITER $$
@@ -220,7 +253,7 @@ CREATE TRIGGER `RSOStatusUpdateP` AFTER INSERT ON `rso_members` FOR EACH ROW BEG
     IF ((SELECT COUNT(*) FROM rso_members M WHERE M.rid = NEW.rid) < 5) 
     THEN 
     UPDATE rso 
-    SET rso.status = 'active'    
+    SET rso.status = 'inactive'    
     WHERE rso.rid = NEW.rid;
     END IF;
 END
@@ -244,7 +277,8 @@ CREATE TABLE `students` (
 
 INSERT INTO `students` (`pid`, `uid`) VALUES
 (11, 1),
-(13, 1);
+(13, 1),
+(14, 1);
 
 -- --------------------------------------------------------
 
@@ -311,7 +345,7 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`eid`),
-  ADD UNIQUE KEY `location` (`location`);
+  ADD KEY `location` (`location`);
 
 --
 -- Indexes for table `location`
@@ -405,7 +439,7 @@ ALTER TABLE `universities`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -417,7 +451,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `eid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `eid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `location`
@@ -429,13 +463,13 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `person`
 --
 ALTER TABLE `person`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `rso`
 --
 ALTER TABLE `rso`
-  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `rso_events`
@@ -447,7 +481,7 @@ ALTER TABLE `rso_events`
 -- AUTO_INCREMENT for table `rso_members`
 --
 ALTER TABLE `rso_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `super_admin`
@@ -471,6 +505,12 @@ ALTER TABLE `universities`
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`spid`) REFERENCES `super_admin` (`spid`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `events`
+--
+ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`location`) REFERENCES `location` (`lname`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `non_rso`

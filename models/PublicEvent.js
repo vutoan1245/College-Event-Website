@@ -1,4 +1,4 @@
-const db = require("./db");
+const db = require("../db");
 class PublicEvent {
   static async findByEid(eid) {
     return db
@@ -30,9 +30,14 @@ class PublicEvent {
       .then(([row]) => row)
       .catch(err => console.log(err));
   }
-  static async add(public){
-      const {aid} = public
-      db.query(`INSERT INTO public_events (aid) VALUES (?)`, [aid])
+  static async add(publicEvent) {
+    const { eid, aid } = publicEvent;
+    db.query(`INSERT INTO public_events (eid, aid) VALUES (?, ?)`, [eid, aid])
+      .then(([fields]) => fields.insertedId)
+      .catch(err => {
+        console.log("[PublicEvent.js] add", err);
+        throw err;
+      });
   }
 }
 module.exports = PublicEvent;

@@ -7,6 +7,8 @@ const passport = require("passport");
 const student = require("./routes/api/student");
 const admin = require("./routes/api/admin");
 const superAdmin = require("./routes/api/super-admin");
+const university = require("./routes/api/university");
+const event = require("./routes/api/event");
 
 const app = express();
 
@@ -20,6 +22,8 @@ require("./config/passport")(passport);
 app.use("/api/student", student);
 app.use("/api/admin", admin);
 app.use("/api/super-admin", superAdmin);
+app.use("/api/university", university);
+app.use("/api/event", event);
 
 const port = 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
