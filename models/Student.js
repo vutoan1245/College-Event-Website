@@ -24,7 +24,9 @@ class Student {
     const student = await db
       .query(`SELECT * from students where pid = ?`, [person.pid])
       .then(([rows]) => rows[0])
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
 
     return {
       ...person,
@@ -41,7 +43,9 @@ class Student {
         [uid]
       )
       .then(([row]) => row)
-      .catch(err => console.log(err));
+      .catch(err => {
+        throw err;
+      });
   }
 
   // Add a new student to `person` and `students` tables

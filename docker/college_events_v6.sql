@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 13, 2019 at 09:15 PM
+-- Generation Time: Nov 12, 2019 at 12:22 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.2.23
 
@@ -58,8 +58,7 @@ INSERT INTO `admin` (`aid`, `pid`, `spid`, `status`) VALUES
 (19, 11, 3, 'inactive'),
 (20, 11, 3, 'inactive'),
 (21, 11, 3, 'inactive'),
-(22, 11, 3, 'inactive'),
-(23, 11, 3, 'inactive');
+(22, 11, 3, 'inactive');
 
 -- --------------------------------------------------------
 
@@ -88,18 +87,16 @@ CREATE TABLE `events` (
   `location` varchar(190) NOT NULL,
   `time` datetime NOT NULL,
   `category` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `email` varchar(190) NOT NULL,
-  `phone` varchar(20) NOT NULL
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`eid`, `name`, `location`, `time`, `category`, `description`, `email`, `phone`) VALUES
-(1, 'bruh', 'UCF', '2019-11-12 00:00:00', '', '', '', ''),
-(2, 'ertet', 'UCF', '2019-11-12 00:00:00', '', '', '', '');
+INSERT INTO `events` (`eid`, `name`, `location`, `time`, `category`, `description`) VALUES
+(1, 'bruh', 'UCF', '2019-11-12 00:00:00', '', ''),
+(2, 'ertet', 'UCF', '2019-11-12 00:00:00', '', '');
 
 -- --------------------------------------------------------
 
@@ -204,8 +201,7 @@ CREATE TABLE `rso` (
 --
 
 INSERT INTO `rso` (`rid`, `aid`, `name`, `description`, `status`) VALUES
-(17, 4, 'Startdust Crusader', 'reeee', 'inactive'),
-(18, 4, 'Startdust Crusader2', 'reeee', 'inactive');
+(17, 4, 'Startdust Crusader', 'reeee', 'inactive');
 
 -- --------------------------------------------------------
 
@@ -236,9 +232,7 @@ CREATE TABLE `rso_members` (
 
 INSERT INTO `rso_members` (`id`, `pid`, `rid`) VALUES
 (4, 13, 17),
-(5, 11, 17),
-(11, 11, 18),
-(12, 13, 18);
+(5, 11, 17);
 
 --
 -- Triggers `rso_members`
@@ -344,9 +338,7 @@ ALTER TABLE `admin`
 -- Indexes for table `comments`
 --
 ALTER TABLE `comments`
-  ADD PRIMARY KEY (`cid`),
-  ADD KEY `eid` (`eid`),
-  ADD KEY `pid` (`pid`);
+  ADD PRIMARY KEY (`cid`);
 
 --
 -- Indexes for table `events`
@@ -447,13 +439,13 @@ ALTER TABLE `universities`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -477,7 +469,7 @@ ALTER TABLE `person`
 -- AUTO_INCREMENT for table `rso`
 --
 ALTER TABLE `rso`
-  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `rso_events`
@@ -489,7 +481,7 @@ ALTER TABLE `rso_events`
 -- AUTO_INCREMENT for table `rso_members`
 --
 ALTER TABLE `rso_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `super_admin`
@@ -513,13 +505,6 @@ ALTER TABLE `universities`
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `person` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`spid`) REFERENCES `super_admin` (`spid`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `comments`
---
-ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `events` (`eid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `students` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`
