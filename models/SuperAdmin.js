@@ -1,5 +1,5 @@
-const db = require("../db");
-const Person = require("./Person");
+const db = require('../db');
+const Person = require('./Person');
 
 class SuperAdmin {
   static async findBySpid(spid) {
@@ -11,12 +11,12 @@ class SuperAdmin {
       )
       .then(([row]) => row[0])
       .catch(err => {
-        console.log("[SuperAdmin.js]", err);
+        console.log('[SuperAdmin.js]', err);
         throw err;
       });
   }
   static async findByUsername(username) {
-    const person = await Person.findByUsernameA(username, "super admin");
+    const person = await Person.findByUsernameA(username, 'super admin');
 
     // Does not exist
     if (!person) {
@@ -52,7 +52,7 @@ class SuperAdmin {
       last_name,
       phone,
       email,
-      access: "super admin"
+      access: 'super admin'
     });
     db.query(`INSERT INTO super_admin (pid) VALUES (?)`, [pid]);
   }

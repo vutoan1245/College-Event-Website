@@ -1,5 +1,5 @@
-const db = require("../db");
-const Location = require("./Location");
+const db = require('../db');
+const Location = require('./Location');
 class Event {
   static async findByEid(eid) {
     return db
@@ -26,7 +26,7 @@ class Event {
         }
       })
       .catch(err => {
-        console.log("[Event.js] add", err);
+        console.log('[Event.js] add', err);
         throw err;
       });
 
@@ -37,7 +37,7 @@ class Event {
       )
       .then(([fields]) => fields.insertId)
       .catch(err => {
-        console.log("[Event.js] add", err);
+        console.log('[Event.js] add', err);
         throw err;
       });
   }

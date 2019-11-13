@@ -1,5 +1,5 @@
-const db = require("../db");
-const Location = require("./Location");
+const db = require('../db');
+const Location = require('./Location');
 
 class University {
   static async findByUid(uid) {
@@ -11,7 +11,7 @@ class University {
       )
       .then(([rows]) => rows[0])
       .catch(err => {
-        console.log("[Universities.js]", err);
+        console.log('[Universities.js]', err);
         throw err;
       });
   }
@@ -24,7 +24,14 @@ class University {
         throw err;
       });
   }
-
+  static async findBySpid(spid) {
+    return db
+      .query(`SELECT * FROM universities WHERE spid = ?`, [spid])
+      .then(([rows]) => row)
+      .catch(err => {
+        throw err;
+      });
+  }
   static async findByName(name) {
     return db
       .query(
@@ -34,7 +41,7 @@ class University {
       )
       .then(row => row[0])
       .catch(err => {
-        console.log("Search uni by name", err);
+        console.log('Search uni by name', err);
         throw err;
       });
   }
@@ -54,10 +61,15 @@ class University {
         await Location.add(location);
       }
     });
-    db.query(
-      `INSERT INTO universities (spid, name, description, student_count, picture, location) VALUES (?,?,?,?,?,?)`,
-      [spid, name, description, student_count, picture, location.lname]
-    );
+    return db
+      .query(
+        `INSERT INTO universities (spid, name, description, student_count, picture, location) VALUES (?,?,?,?,?,?)`,
+        [spid, name, description, student_count, picture, location.lname]
+      )
+      .then(([field]) => field.insertId)
+      .catch(err => {
+        throw err;
+      });
   }
 }
 
