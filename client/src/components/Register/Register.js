@@ -1,139 +1,138 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-import Form from '../commons/Form/Form';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Form, Button, FormGroup, FormControl } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function Register(props) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [university, setUniversity] = useState();
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassord] = useState('');
-
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState();
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassord] = useState("");
 
   const [universityList, setUniversityList] = useState([]);
 
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setError("");
+  }, [firstName, lastName, email, university, password, rePassword]);
+
   useEffect(() => {
     axios
-      .get('/api/university/names')
+      .get("/api/super-admin/university/names")
       .then(result => setUniversityList(result.data))
       .catch(err => console.error(err));
   }, []);
 
   const validate = () => {
-    return (
-      firstName &&
-      lastName &&
-      email &&
-      university &&
-      password &&
-      password === rePassword
-    );
+    if (password !== rePassword) {
+      setError("Password is not match");
+      return false;
+    }
+    if (!firstName || !lastName || !email || !university || !password) {
+      setError("Please enter all fields");
+      return false;
+    }
+
+    setError("");
+    return true;
   };
 
-  const onSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
 
-    console.log(university);
     if (!validate()) {
-      setHasError(true);
-      setErrorMessage('Please enter all fields');
       return;
     }
+
     axios
-      .post('/api/student/register', {
+      .post("/api/student/register", {
         username: email,
         password,
-        firstName,
-        lastName
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        university,
+        phone: "mock_phone"
       })
       .then(() => {
-        props.history.push('/student/login');
+        props.history.push("/student/login");
       })
-      .catch(err => console.error('[Register.js]', err));
+      .catch(err => console.error("[Register.js]", err));
   };
 
   return (
-    <Form onSubmit={onSubmit}>
-      <h4 className="text-uppercase text-xl-center font-weight-bold">
-        REGISTER
-      </h4>
-      <div className="form-group">
-        <label>First name:</label>
-        <input
-          value={firstName}
-          className="form-control"
-          placeholder="Enter first name"
-          onChange={event => setFirstName(event.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Last name:</label>
-        <input
-          value={lastName}
-          className="form-control"
-          placeholder="Enter last name"
-          onChange={event => setLastName(event.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Email address:</label>
-        <input
-          value={email}
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          onChange={event => setEmail(event.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>University:</label>
-        <select
-          value={university}
-          defaultValue="DEFAULT"
-          className="form-control"
-          onChange={event => setUniversity(event.target.value)}
-        >
-          <option value="DEFAULT" disabled>
-            -- select an option --
-          </option>
-
-          {universityList.map(uni => (
-            <option key={uni} value={uni}>
-              {uni}
+    <div className="form-container">
+      <Form onSubmit={handleSubmit}>
+        <h2>Register</h2>
+        <FormGroup>
+          <FormControl
+            autoFocus
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+            placeholder="First Name"
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormControl
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+            placeholder="Last Name"
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormControl
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="Email"
+          />
+        </FormGroup>
+        <FormGroup>
+          <Form.Control
+            as="select"
+            defaultValue="DEFAULT"
+            value={university}
+            onChange={event => setUniversity(event.target.value)}
+          >
+            <option value="DEFAULT" disabled>
+              -- select an university --
             </option>
-          ))}
-        </select>
-      </div>
+            {universityList.map((uni, index) => (
+              <option key={index}>{uni}</option>
+            ))}
+          </Form.Control>
+        </FormGroup>
+        <FormGroup>
+          <FormControl
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            type="password"
+            placeholder="Password"
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormControl
+            value={rePassword}
+            onChange={e => setRePassord(e.target.value)}
+            type="password"
+            placeholder="Confirm Password"
+          />
+        </FormGroup>
 
-      <div className="form-group">
-        <label>Password:</label>
-        <input
-          value={password}
-          type="password"
-          className="form-control"
-          placeholder="Password"
-          onChange={event => setPassword(event.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Confirm password:</label>
-        <input
-          value={rePassword}
-          type="password"
-          className="form-control"
-          placeholder="Confirm password"
-          onChange={event => setRePassord(event.target.value)}
-        />
-      </div>
-      <button type="submit" className="btn btn-dark mx-auto d-block">
-        Submit
-      </button>
-      {hasError ? <p className="form-error">{errorMessage}</p> : null}
-    </Form>
+        <Button block type="submit">
+          Register
+        </Button>
+
+        <p className="form-label">
+          Aldready have an account? <Link to="/student/login">Login</Link>
+        </p>
+
+        {error ? <p className="form-error">{error}</p> : null}
+      </Form>
+    </div>
   );
 }
 
