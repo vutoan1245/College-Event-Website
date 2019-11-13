@@ -32,6 +32,15 @@ function EventToday() {
             ))}
           </Form.Control>
         </Form.Group>
+
+        <Form.Group as={Col} controlId="formGridRso">
+          <Form.Control as="select">
+            <option> -- Select event type -- </option>
+            <option>Public</option>
+            <option>Private</option>
+            <option>RSO</option>
+          </Form.Control>
+        </Form.Group>
       </Form.Row>
 
       {eventList.map((event, index) => (

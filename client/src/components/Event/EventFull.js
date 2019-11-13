@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Card, Row, Image } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 import Map from "../Map/Map";
 

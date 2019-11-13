@@ -26,12 +26,21 @@ function EventUpcomming() {
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
         </Form.Group>
 
-        <Form.Group as={Col} controlId="formGridState">
+        <Form.Group as={Col} controlId="formGridUniversity">
           <Form.Control as="select">
-            <option> Select an university </option>
+            <option> -- Select an university -- </option>
             {universityList.map((uni, index) => (
               <option key={index}>{uni}</option>
             ))}
+          </Form.Control>
+        </Form.Group>
+
+        <Form.Group as={Col} controlId="formGridRso">
+          <Form.Control as="select">
+            <option> -- Select event type -- </option>
+            <option>Public</option>
+            <option>Private</option>
+            <option>RSO</option>
           </Form.Control>
         </Form.Group>
       </Form.Row>
