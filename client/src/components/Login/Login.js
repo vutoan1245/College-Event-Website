@@ -1,65 +1,90 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Form, Button, FormGroup, FormControl } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
-import Form from '../commons/Form/Form';
-import { ADD_TOKEN } from '../../store/action';
+import { ADD_TOKEN, ADD_USER_DATA } from "../../store/action";
+
+import "./Login.css";
 
 const Login = props => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [hasError, setHasError] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
 
-  const onSubmit = event => {
+  useEffect(() => {
+    setError("");
+  }, [username, password]);
+
+  const handleSubmit = event => {
     event.preventDefault();
 
+    if (!username || !password) {
+      setError("Please all fields");
+      return;
+    }
+
     axios
-      .post('/api/student/login', { username, password })
+      .post("/api/student/login", { username, password })
       .then(result => {
-        console.log(result);
         const { token } = result.data;
+        console.log(token);
         dispatch({ type: ADD_TOKEN, payload: { token } });
-        props.history.push('/student');
+
+        return Promise.all([
+          axios.get("/api/student/current", {
+            headers: {
+              Authorization: token
+            }
+          }),
+          axios.get("/api/super-admin/university/names")
+        ]);
       })
-      .catch(err => {
-        console.log(err);
-        setHasError(true);
+      .then(result => {
+        dispatch({
+          type: ADD_USER_DATA,
+          payload: { userData: result[0].data, universityList: result[1].data }
+        });
+        props.history.push("/student");
+      })
+      .catch(() => {
+        setError("Wrong username or password");
       });
   };
 
   return (
-    <Form onSubmit={onSubmit}>
-      <h4 className="text-uppercase text-xl-center font-weight-bold">
-        REGISTER
-      </h4>
-      <div className="form-group">
-        <label htmlFor="exampleInputEmail1">Email:</label>
-        <input
-          value={username}
-          className="form-control"
-          placeholder="Username"
-          onChange={event => setUsername(event.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="exampleInputEmail1">Password:</label>
-        <input
-          value={password}
-          className="form-control"
-          type="password"
-          placeholder="Password"
-          onChange={event => setPassword(event.target.value)}
-        />
-      </div>
-      <button type="submit" className="btn btn-dark mx-auto d-block">
-        Submit
-      </button>
-      {hasError ? (
-        <p className="form-error">Wrong username or password</p>
-      ) : null}
-    </Form>
+    <div className="form-container">
+      <Form onSubmit={handleSubmit} autoComplete="off">
+        <h2>Login</h2>
+        <FormGroup controlId="email">
+          <FormControl
+            autoFocus
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder="Email"
+          />
+        </FormGroup>
+        <FormGroup controlId="password">
+          <FormControl
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            type="password"
+            placeholder="Password"
+          />
+        </FormGroup>
+        <Button block type="submit">
+          Login
+        </Button>
+        <Form.Label>
+          Don't have an account? <Link to="/student/register">Register</Link>
+        </Form.Label>
+        {error ? <p className="form-error">{error}</p> : null}
+      </Form>
+    </div>
   );
 };
 

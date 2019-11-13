@@ -1,43 +1,54 @@
-import React from 'react';
-import { BrowserRouter, Route, Switch, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import Header from '../../components/Header/Header';
-import Login from '../../components/Login/Login';
-import Register from '../../components/Register/Register';
-import { REMOVE_USER_DATA } from '../../store/action';
-
-import './Student.css';
+import Header from "../../components/Header/Header";
+import Login from "../../components/Login/Login";
+import Register from "../../components/Register/Register";
+import EventTab from "../../components/Event/EventTab";
+import RsoTab from "../../components/Rso/RsoTab";
+import University from "../../components/University/University";
+import EventFull from "../../components/Event/EventFull";
 
 function Student(props) {
-  const dispatch = useDispatch();
+  const uid = useSelector(state => state.userData.uid);
+  const token = useSelector(state => state.token);
 
-  let match = useRouteMatch();
+  if (!token && props.location.pathname !== "/student/login") {
+    return <Redirect to="/student/login" />;
+  }
 
-  const onLogout = () => {
-    dispatch({ type: REMOVE_USER_DATA });
-    props.history.push('/student/login');
-  };
   return (
     <BrowserRouter>
-      <div className="student_container">
-        <Switch>
-          <Route path={`${match.path}/register`}>
-            <Register {...props} />
-          </Route>
-          <Route path={`${match.path}/login`}>
-            <Login {...props} />
-          </Route>
-          <Route path={match.path}>
-            <Header>
-              <p className="logout_btn" onClick={onLogout}>
-                Logout
-              </p>
-            </Header>
-            <h3>Hello World</h3>
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path="/student/register" exact>
+          <Register history={props.history} />
+        </Route>
+
+        <Route path="/student/login" exact>
+          <Login history={props.history} />
+        </Route>
+
+        <Route path="/student/event" exact>
+          <Header history={props.history} />
+          <EventTab history={props.history} />
+        </Route>
+
+        <Route path="/student/event/:eid" exact>
+          <Header history={props.history} />
+          <EventFull history={props.history} />
+        </Route>
+
+        <Route path="/student/rso">
+          <Header history={props.history} />
+          <RsoTab />
+        </Route>
+
+        <Route path="/student">
+          <Header history={props.history} />
+          <University uid={uid} />
+        </Route>
+      </Switch>
     </BrowserRouter>
   );
 }
