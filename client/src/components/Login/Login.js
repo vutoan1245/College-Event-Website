@@ -42,7 +42,7 @@ const Login = props => {
             }
           }),
           axios.get("/api/super-admin/university/names")
-        ]).then();
+        ]);
       })
       .then(result => {
         dispatch({

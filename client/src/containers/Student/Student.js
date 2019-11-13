@@ -8,6 +8,7 @@ import Register from "../../components/Register/Register";
 import EventTab from "../../components/Event/EventTab";
 import RsoTab from "../../components/Rso/RsoTab";
 import University from "../../components/University/University";
+import EventFull from "../../components/Event/EventFull";
 
 function Student(props) {
   const uid = useSelector(state => state.userData.uid);
@@ -31,6 +32,11 @@ function Student(props) {
         <Route path="/student/event" exact>
           <Header history={props.history} />
           <EventTab history={props.history} />
+        </Route>
+
+        <Route path="/student/event/:eid" exact>
+          <Header history={props.history} />
+          <EventFull history={props.history} />
         </Route>
 
         <Route path="/student/rso">
