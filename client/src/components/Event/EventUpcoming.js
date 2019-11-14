@@ -1,23 +1,31 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { Form, Col, FormControl } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { Form, Col, FormControl } from 'react-bootstrap';
 
-import EventReview from "./EventPreview";
+import EventReview from './EventPreview';
 
-function EventUpcomming() {
+function EventUpcomming(props) {
   const [eventList, setEventList] = useState([]);
+  const [filter, setFilter] = useState('');
 
+  const token = useSelector(state => state.token);
   const universityList = useSelector(state => state.universityList);
 
   useEffect(() => {
     axios
-      .get("https://events.ucf.edu/upcoming/feed.json")
-      .then(result => {
-        setEventList(result.data);
+      .get('/api/event/all', {
+        headers: {
+          Authorization: token
+        }
       })
-      .catch(err => console.error(err));
-  }, []);
+      .then(result => setEventList(result.data))
+      .catch(err => console.log(err));
+  }, [token]);
+
+  const onClickEvent = eid => {
+    props.history.push('/student/event/' + eid);
+  };
 
   return (
     <>
@@ -36,8 +44,12 @@ function EventUpcomming() {
         </Form.Group>
 
         <Form.Group as={Col} controlId="formGridRso">
-          <Form.Control as="select">
-            <option> -- Select event type -- </option>
+          <Form.Control
+            as="select"
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+          >
+            <option value=""> -- Select event type -- </option>
             <option>Public</option>
             <option>Private</option>
             <option>RSO</option>
@@ -45,14 +57,18 @@ function EventUpcomming() {
         </Form.Group>
       </Form.Row>
 
-      {eventList.map((event, index) => (
-        <EventReview
-          key={index}
-          title={event.title}
-          date={event.starts}
-          description={event.description}
-        />
-      ))}
+      {eventList
+        .filter(event => event.type === filter || !filter)
+        .map((event, index) => (
+          <EventReview
+            key={index}
+            title={event.name}
+            date={event.time}
+            description={event.description}
+            type={event.type}
+            onClick={() => onClickEvent(event.eid)}
+          />
+        ))}
     </>
   );
 }

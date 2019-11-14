@@ -5,7 +5,7 @@ import EventForm from './EventForm';
 import EventUpcomming from './EventUpcoming';
 import EventToday from './EventToday';
 
-function Content() {
+function EventTab(props) {
   const [key, setKey] = useState('Upcomming');
 
   return (
@@ -14,7 +14,7 @@ function Content() {
       <Tabs activeKey={key} onSelect={k => setKey(k)}>
         <Tab eventKey="Upcomming" title="Upcomming">
           <br />
-          <EventUpcomming />
+          <EventUpcomming history={props.history} />
         </Tab>
         <Tab eventKey="Today" title="Today">
           <br />
@@ -22,11 +22,11 @@ function Content() {
         </Tab>
         <Tab eventKey="Request" title="Request">
           <br />
-          <EventForm />
+          <EventForm history={props.history} />
         </Tab>
       </Tabs>
     </Container>
   );
 }
 
-export default Content;
+export default EventTab;

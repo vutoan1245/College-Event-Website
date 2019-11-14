@@ -21,10 +21,19 @@ class NonRso {
       .catch(err => console.log(err));
   }
   static async add(event) {
-    const { pid, uid } = event;
+    const { eid, pid, uid } = event;
     const uni = await University.findByUid(uid);
     const spid = uni.spid;
-    db.query(`INSERT INTO non_rso (pid, spid) VALUES (?,?)`, [pid, spid]);
+    db.query(`INSERT INTO non_rso (eid, pid, spid) VALUES (?, ?, ?)`, [
+      eid,
+      pid,
+      spid
+    ])
+      .then(() => eid)
+      .catch(err => {
+        console.log('[NonRso.js] add', err);
+        throw err;
+      });
   }
   static async updateStatus(eid, status) {
     db.query(`UPDATE non_rso SET status = ? WHERE eid = ?`, [status, eid]);

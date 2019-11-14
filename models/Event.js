@@ -18,13 +18,14 @@ class Event {
       });
   }
   static async add(event) {
-    const { name, location, time, category, description } = event;
+    const { name, location, time, category, description, email, phone } = event;
     await Location.findByLname(location.lname)
       .then(loc => {
         if (!loc) {
-          Location.add(location);
+          return Location.add(location);
         }
       })
+      .then(() => 'success')
       .catch(err => {
         console.log('[Event.js] add', err);
         throw err;
@@ -32,8 +33,8 @@ class Event {
 
     return db
       .query(
-        `INSERT INTO events (name, location, time, category, description) VALUES (?,?,?,?,?)`,
-        [name, location.lname, time, category, description]
+        `INSERT INTO events (name, location, time, category, description, email, phone) VALUES (?, ?, ?,? , ?, ?, ?)`,
+        [name, location.lname, time, category, description, email, phone]
       )
       .then(([fields]) => fields.insertId)
       .catch(err => {
