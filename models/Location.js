@@ -24,7 +24,7 @@ class Location {
       .query(`SELECT * FROM location WHERE address LIKE ?`, [
         '%' + address + '%'
       ])
-      .then(([row]) => row)
+      .then(([rows]) => rows[0])
       .catch(err => {
         console.log('Location address: ', err);
         throw err;

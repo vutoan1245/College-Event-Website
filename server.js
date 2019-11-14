@@ -8,6 +8,8 @@ const path = require('path');
 const student = require("./routes/api/student");
 const admin = require("./routes/api/admin");
 const superAdmin = require("./routes/api/super-admin");
+const university = require("./routes/api/university");
+const event = require("./routes/api/event");
 
 const app = express();
 
@@ -21,6 +23,8 @@ require("./config/passport")(passport);
 app.use("/api/student", student);
 app.use("/api/admin", admin);
 app.use("/api/super-admin", superAdmin);
+app.use("/api/university", university);
+app.use("/api/event", event);
 
 // Set static folder
 app.use(express.static('client/build'));

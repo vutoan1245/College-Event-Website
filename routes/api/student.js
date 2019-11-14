@@ -126,11 +126,15 @@ router.get(
   '/current',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const { pid, uid, first_name, last_name, access } = req.user;
+
+    const { pid, first_name, last_name, access, uid, aid } = req.user;
+
     if (access !== 'student') {
       return res.status(400).json({ message: 'Required permission: Student' });
     }
     res.json({
+      uid,
+      aid,
       pid,
       uid,
       firstName: first_name,
@@ -140,5 +144,6 @@ router.get(
 );
 router.use('/rso', RsoRoutes);
 router.use('/comment', commentRoute);
+
 
 module.exports = router;
