@@ -8,6 +8,7 @@ const Student = require('../../models/Student');
 const Person = require('../../models/Person');
 const RsoRoutes = require('./rso');
 const router = express.Router();
+const commentRoute = require('./comment');
 
 // @route   POST api/student/register
 // @desc    Register user
@@ -125,7 +126,9 @@ router.get(
   '/current',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
+
     const { pid, first_name, last_name, access, uid, aid } = req.user;
+
     if (access !== 'student') {
       return res.status(400).json({ message: 'Required permission: Student' });
     }
@@ -140,5 +143,7 @@ router.get(
   }
 );
 router.use('/rso', RsoRoutes);
+router.use('/comment', commentRoute);
+
 
 module.exports = router;
