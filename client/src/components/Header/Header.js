@@ -1,16 +1,17 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Nav, Navbar, Form, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { REMOVE_USER_DATA } from '../../store/action';
 
 function Header(props) {
+  const userData = useSelector(state => state.userData);
   const dispatch = useDispatch();
 
   const onLogout = () => {
     dispatch({ type: REMOVE_USER_DATA });
-    props.history.push('/student/login');
+    props.history.push('/login');
   };
 
   return (
@@ -26,6 +27,11 @@ function Header(props) {
           <Link className="nav-link" to="/student/rso">
             RSO
           </Link>
+          {userData.access === 'super admin' ? (
+            <Link className="nav-link" to="/student/university">
+              University
+            </Link>
+          ) : null}
         </Nav>
         <Form inline>
           <Button variant="outline-info" onClick={onLogout}>

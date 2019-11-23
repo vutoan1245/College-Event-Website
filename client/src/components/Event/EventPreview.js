@@ -53,7 +53,7 @@ function Event({ title, date, description, internal, type, onClick }) {
           {type}
         </p>
         <StarRatings
-          rating={Math.random(2) + 4}
+          rating={0}
           starRatedColor="#5c5c5c"
           starDimension="1rem"
           starSpacing="0.1rem"

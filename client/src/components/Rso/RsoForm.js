@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { Form, Button } from "react-bootstrap";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { Form, Button } from 'react-bootstrap';
 
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 
-function EventForm() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+function EventForm(props) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   const token = useSelector(state => state.token);
   const userData = useSelector(state => state.userData);
@@ -16,7 +16,7 @@ function EventForm() {
 
     axios
       .post(
-        "/api/student/rso/create",
+        '/api/student/rso/create',
         {
           name,
           description,
@@ -31,6 +31,7 @@ function EventForm() {
       )
       .then(result => {
         console.log(result);
+        props.history.push('/student/rso');
       })
       .catch(err => {
         console.log(err);

@@ -1,6 +1,7 @@
 const db = require('../db');
 const Person = require('./Person');
 const University = require('./University');
+
 class Student {
   static async findByPid(pid) {
     return db

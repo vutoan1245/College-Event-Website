@@ -1,10 +1,10 @@
 const express = require('express');
-const University = require('../../models/University');
 const passport = require('passport');
 const router = express.Router();
 const Rso = require('../../models/Rso');
 const Admin = require('../../models/Admin');
 const RsoMember = require('../../models/RsoMember');
+
 // @route   POST api/../rso/create
 // @desc    Create rso
 // @access  Student

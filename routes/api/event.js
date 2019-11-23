@@ -82,8 +82,8 @@ router.post(
       time: moment(date).format('YYYY-MM-DD HH:mm:ss'),
       location,
       category,
-      email: 'no@email.com' || email,
-      phone: '(***) ***-****' || phone
+      email: email || 'no@email.com',
+      phone: phone || '(***) ***-****'
     };
 
     Event.add(newEvent)

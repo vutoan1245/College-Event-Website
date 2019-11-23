@@ -29,13 +29,14 @@ const Login = props => {
     }
 
     axios
-      .post('/api/student/login', { username, password })
+      .post('/api/user/login', { username, password })
       .then(result => {
         const { token } = result.data;
+        console.log(token);
         dispatch({ type: ADD_TOKEN, payload: { token } });
 
         return Promise.all([
-          axios.get('/api/student/current', {
+          axios.get('/api/user/current', {
             headers: {
               Authorization: token
             }

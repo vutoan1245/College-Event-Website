@@ -9,10 +9,11 @@ import EventTab from '../../components/Event/EventTab';
 import RsoTab from '../../components/Rso/RsoTab';
 import University from '../../components/University/University';
 import EventFull from '../../components/Event/EventFull';
+import UniversityTab from '../../components/University/UniversityTab';
 
 function Student(props) {
-  const uid = useSelector(state => state.userData.uid);
   const token = useSelector(state => state.token);
+  const userData = useSelector(state => state.userData);
 
   if (!token && props.location.pathname !== '/student/login') {
     return <Redirect to="/student/login" />;
@@ -22,7 +23,11 @@ function Student(props) {
     <BrowserRouter>
       <Switch>
         <Route path="/student/register" exact>
-          <Register history={props.history} />
+          <Register
+            history={props.history}
+            endpoint="/api/student/register"
+            admin
+          />
         </Route>
 
         <Route path="/student/login" exact>
@@ -44,9 +49,19 @@ function Student(props) {
           <RsoTab history={props.history} />
         </Route>
 
+        <Route path="/student/university/:uid">
+          <Header history={props.history} />
+          <University />
+        </Route>
+
+        <Route path="/student/university">
+          <Header history={props.history} />
+          <UniversityTab history={props.history} />
+        </Route>
+
         <Route path="/student">
           <Header history={props.history} />
-          <University uid={uid} />
+          <University uid={userData.uid} />
         </Route>
       </Switch>
     </BrowserRouter>
