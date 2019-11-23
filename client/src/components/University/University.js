@@ -43,7 +43,7 @@ const styles = {
 function University(props) {
   const [university, setUniversity] = useState({});
 
-  const uid = props.uid || useParams.uid;
+  const uid = useParams().uid || props.uid;
 
   useEffect(() => {
     axios

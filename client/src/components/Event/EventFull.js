@@ -59,7 +59,7 @@ function EventFull() {
       })
       .then(result => setEvent(result.data))
       .catch(err => console.log(err));
-  }, []);
+  }, [eid, token]);
 
   return (
     <Container>

@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { Card } from 'react-bootstrap';
 
 const styles = {

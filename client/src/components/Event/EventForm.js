@@ -36,7 +36,6 @@ function EventForm(props) {
   const [error, setError] = useState('');
 
   const token = useSelector(state => state.token);
-  const userData = useSelector(state => state.userData);
 
   const validate = () => {
     if (
