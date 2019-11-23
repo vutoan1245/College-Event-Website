@@ -29,13 +29,14 @@ const Login = props => {
     }
 
     axios
-      .post('/api/student/login', { username, password })
+      .post('/api/user/login', { username, password })
       .then(result => {
         const { token } = result.data;
+        console.log(token);
         dispatch({ type: ADD_TOKEN, payload: { token } });
 
         return Promise.all([
-          axios.get('/api/student/current', {
+          axios.get('/api/user/current', {
             headers: {
               Authorization: token
             }
@@ -44,11 +45,18 @@ const Login = props => {
         ]);
       })
       .then(result => {
+        const userData = result[0].data;
+        const universityList = result[1].data;
         dispatch({
           type: ADD_USER_DATA,
-          payload: { userData: result[0].data, universityList: result[1].data }
+          payload: { userData, universityList }
         });
-        props.history.push('/student');
+
+        if (userData.access === 'super admin') {
+          props.history.push('/event');
+        } else {
+          props.history.push('/');
+        }
       })
       .catch(() => {
         setError('Wrong username or password');

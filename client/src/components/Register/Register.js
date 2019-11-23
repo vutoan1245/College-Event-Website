@@ -1,42 +1,48 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Form, Button, FormGroup, FormControl } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Form, Button, FormGroup, FormControl } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function Register(props) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [university, setUniversity] = useState();
-  const [password, setPassword] = useState("");
-  const [rePassword, setRePassord] = useState("");
+  const [password, setPassword] = useState('');
+  const [rePassword, setRePassord] = useState('');
 
   const [universityList, setUniversityList] = useState([]);
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    setError("");
+    setError('');
   }, [firstName, lastName, email, university, password, rePassword]);
 
   useEffect(() => {
     axios
-      .get("/api/super-admin/university/names")
+      .get('/api/super-admin/university/names')
       .then(result => setUniversityList(result.data))
       .catch(err => console.error(err));
   }, []);
 
   const validate = () => {
     if (password !== rePassword) {
-      setError("Password is not match");
+      setError('Password is not match');
       return false;
     }
-    if (!firstName || !lastName || !email || !university || !password) {
-      setError("Please enter all fields");
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      (!props.admin && !university) ||
+      !password
+    ) {
+      setError('Please enter all fields');
       return false;
     }
 
-    setError("");
+    setError('');
     return true;
   };
 
@@ -48,19 +54,23 @@ function Register(props) {
     }
 
     axios
-      .post("/api/student/register", {
+      .post(props.endpoint, {
         username: email,
         password,
         first_name: firstName,
         last_name: lastName,
         email,
         university,
-        phone: "mock_phone"
+        phone: 'mock_phone'
       })
       .then(() => {
-        props.history.push("/student/login");
+        props.history.push('/login');
       })
-      .catch(err => console.error("[Register.js]", err));
+      .catch(err => {
+        setError('Something went wrong');
+
+        console.error('[Register.js]', err);
+      });
   };
 
   return (
@@ -90,21 +100,25 @@ function Register(props) {
             placeholder="Email"
           />
         </FormGroup>
-        <FormGroup>
-          <Form.Control
-            as="select"
-            defaultValue="DEFAULT"
-            value={university}
-            onChange={event => setUniversity(event.target.value)}
-          >
-            <option value="DEFAULT" disabled>
-              -- select an university --
-            </option>
-            {universityList.map((uni, index) => (
-              <option key={index}>{uni}</option>
-            ))}
-          </Form.Control>
-        </FormGroup>
+
+        {!props.admin ? (
+          <FormGroup>
+            <Form.Control
+              as="select"
+              defaultValue="DEFAULT"
+              value={university}
+              onChange={event => setUniversity(event.target.value)}
+            >
+              <option value="DEFAULT" disabled>
+                -- select an university --
+              </option>
+              {universityList.map((uni, index) => (
+                <option key={index}>{uni}</option>
+              ))}
+            </Form.Control>
+          </FormGroup>
+        ) : null}
+
         <FormGroup>
           <FormControl
             value={password}
@@ -127,7 +141,7 @@ function Register(props) {
         </Button>
 
         <p className="form-label">
-          Aldready have an account? <Link to="/student/login">Login</Link>
+          Aldready have an account? <Link to="/login">Login</Link>
         </p>
 
         {error ? <p className="form-error">{error}</p> : null}

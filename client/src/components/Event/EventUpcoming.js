@@ -10,7 +10,6 @@ function EventUpcomming(props) {
   const [filter, setFilter] = useState('');
 
   const token = useSelector(state => state.token);
-  const universityList = useSelector(state => state.universityList);
 
   useEffect(() => {
     axios
@@ -24,7 +23,7 @@ function EventUpcomming(props) {
   }, [token]);
 
   const onClickEvent = eid => {
-    props.history.push('/student/event/' + eid);
+    props.history.push('/event/' + eid);
   };
 
   return (
@@ -32,15 +31,6 @@ function EventUpcomming(props) {
       <Form.Row>
         <Form.Group as={Col} controlId="formGridCity">
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-        </Form.Group>
-
-        <Form.Group as={Col} controlId="formGridUniversity">
-          <Form.Control as="select">
-            <option> -- Select an university -- </option>
-            {universityList.map((uni, index) => (
-              <option key={index}>{uni}</option>
-            ))}
-          </Form.Control>
         </Form.Group>
 
         <Form.Group as={Col} controlId="formGridRso">

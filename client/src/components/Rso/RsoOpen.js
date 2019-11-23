@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { Form, Button, FormControl } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { Form, Button, FormControl } from 'react-bootstrap';
 
-import RsoPreview from "./RsoPreview";
+import RsoPreview from './RsoPreview';
 
 const styles = {
-  formGroup: { display: "flex" }
+  formGroup: {
+    display: 'flex'
+  }
 };
 
 function RsoOpen() {
   const [rsoList, setRsoList] = useState([]);
   const uid = useSelector(state => state.userData.uid);
+  const token = useSelector(state => state.token);
 
   useEffect(() => {
     axios
@@ -19,6 +22,22 @@ function RsoOpen() {
       .then(result => setRsoList(result.data.data))
       .catch(err => console.log(err));
   }, [uid]);
+
+  const handleJoinRso = rid => {
+    axios
+      .post(
+        '/api/student/rso/join',
+        { rid },
+        {
+          headers: {
+            Authorization: token
+          }
+        }
+      )
+      .then(result => {
+        console.log('success', result);
+      });
+  };
 
   return (
     <>
@@ -32,8 +51,10 @@ function RsoOpen() {
           title={rso.name}
           members={40}
           description={rso.description}
+          status={rso.status}
+          rso={rso}
         >
-          <Button>Join</Button>
+          <Button onClick={() => handleJoinRso(rso.rid)}>Join</Button>
         </RsoPreview>
       ))}
     </>

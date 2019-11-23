@@ -1,17 +1,23 @@
-import React from "react";
-import { Card } from "react-bootstrap";
+import React from 'react';
+import { Card } from 'react-bootstrap';
 
 const styles = {
   card: {
-    width: "100%",
-    backgroundColor: "black"
+    width: '100%',
+    backgroundColor: 'black'
   },
   title: {
-    color: "#6a6aff"
+    color: '#6a6aff'
+  },
+  eventType: {
+    position: 'absolute',
+    right: '1rem',
+    top: '1rem',
+    fontSize: '1rem'
   }
 };
 
-function RsoPreview({ title, members, description, children }) {
+function RsoPreview({ title, members, description, children, status, rso }) {
   return (
     <Card text="light" border="secondary" style={styles.card}>
       <Card.Body>
@@ -20,8 +26,10 @@ function RsoPreview({ title, members, description, children }) {
             <strong>{title}</strong>
           </h4>
         </Card.Title>
-        <Card.Subtitle className="mb-2">{members} members</Card.Subtitle>
-        <Card.Text>{description.substring(0, 300) + " ..."}</Card.Text>
+        <p className="mb-2 text-muted" style={styles.eventType}>
+          {status}
+        </p>
+        <Card.Text>{description.substring(0, 300) + ' ...'}</Card.Text>
         {children}
       </Card.Body>
     </Card>

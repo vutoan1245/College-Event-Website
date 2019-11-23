@@ -50,8 +50,6 @@ function EventFull() {
   const token = useSelector(state => state.token);
   const { eid } = useParams();
 
-  console.log(event.description);
-
   useEffect(() => {
     axios
       .get(`/api/event/${eid}`, {
@@ -61,7 +59,7 @@ function EventFull() {
       })
       .then(result => setEvent(result.data))
       .catch(err => console.log(err));
-  }, []);
+  }, [eid, token]);
 
   return (
     <Container>
@@ -71,7 +69,7 @@ function EventFull() {
           {new Date(event.time).toUTCString()}
         </h4>
         <StarRatings
-          rating={Math.random(2) + 4}
+          rating={5}
           starRatedColor="#5c5c5c"
           starDimension="1rem"
           starSpacing="0.1rem"
