@@ -83,7 +83,7 @@ function EventForm(props) {
         }
       )
       .then(result => {
-        props.history.push('/student/event/' + result.data.eid);
+        props.history.push('/event/' + result.data.eid);
       })
       .catch(err => {
         console.log(err);

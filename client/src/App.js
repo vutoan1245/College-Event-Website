@@ -13,6 +13,7 @@ function App() {
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/student" component={Student} />
+        <Route path="/" component={Student} />
       </Switch>
     </BrowserRouter>
   );

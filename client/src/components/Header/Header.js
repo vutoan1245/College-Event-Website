@@ -20,23 +20,23 @@ function Header(props) {
       <Container>
         <Link
           className="navbar-brand"
-          to={userData.access === 'super admin' ? '/student/event' : '/student'}
+          to={userData.access === 'super admin' ? '/event' : '/'}
         >
           College Events
         </Link>
         <Nav className="mr-auto">
-          <Link className="nav-link" to="/student/event">
+          <Link className="nav-link" to="/event">
             Event
           </Link>
 
           {userData.access !== 'super admin' ? (
-            <Link className="nav-link" to="/student/rso">
+            <Link className="nav-link" to="/rso">
               RSO
             </Link>
           ) : null}
 
           {userData.access === 'super admin' ? (
-            <Link className="nav-link" to="/student/university">
+            <Link className="nav-link" to="/university">
               University
             </Link>
           ) : null}

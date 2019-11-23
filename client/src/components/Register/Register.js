@@ -31,7 +31,13 @@ function Register(props) {
       setError('Password is not match');
       return false;
     }
-    if (!firstName || !lastName || !email || !university || !password) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      (!props.admin && !university) ||
+      !password
+    ) {
       setError('Please enter all fields');
       return false;
     }
@@ -48,7 +54,7 @@ function Register(props) {
     }
 
     axios
-      .post('/api/student/register', {
+      .post(props.endpoint, {
         username: email,
         password,
         first_name: firstName,
@@ -60,7 +66,11 @@ function Register(props) {
       .then(() => {
         props.history.push('/login');
       })
-      .catch(err => console.error('[Register.js]', err));
+      .catch(err => {
+        setError('Something went wrong');
+
+        console.error('[Register.js]', err);
+      });
   };
 
   return (
@@ -90,21 +100,25 @@ function Register(props) {
             placeholder="Email"
           />
         </FormGroup>
-        <FormGroup>
-          <Form.Control
-            as="select"
-            defaultValue="DEFAULT"
-            value={university}
-            onChange={event => setUniversity(event.target.value)}
-          >
-            <option value="DEFAULT" disabled>
-              -- select an university --
-            </option>
-            {universityList.map((uni, index) => (
-              <option key={index}>{uni}</option>
-            ))}
-          </Form.Control>
-        </FormGroup>
+
+        {!props.admin ? (
+          <FormGroup>
+            <Form.Control
+              as="select"
+              defaultValue="DEFAULT"
+              value={university}
+              onChange={event => setUniversity(event.target.value)}
+            >
+              <option value="DEFAULT" disabled>
+                -- select an university --
+              </option>
+              {universityList.map((uni, index) => (
+                <option key={index}>{uni}</option>
+              ))}
+            </Form.Control>
+          </FormGroup>
+        ) : null}
+
         <FormGroup>
           <FormControl
             value={password}
@@ -127,7 +141,7 @@ function Register(props) {
         </Button>
 
         <p className="form-label">
-          Aldready have an account? <Link to="/student/login">Login</Link>
+          Aldready have an account? <Link to="/login">Login</Link>
         </p>
 
         {error ? <p className="form-error">{error}</p> : null}

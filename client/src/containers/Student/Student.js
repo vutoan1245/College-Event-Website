@@ -19,7 +19,12 @@ function Student(props) {
   const token = useSelector(state => state.token);
   const userData = useSelector(state => state.userData);
 
-  if (token && props.location.pathname !== '/login') {
+  const pathname = props.location;
+  if (!token && pathname === '/student/register') {
+    return <Redirect to="/login" />;
+  }
+
+  if (token && (pathname !== '/login' || pathname !== '/student/register')) {
     axios
       .get('/api/user/current', {
         headers: {
@@ -35,51 +40,53 @@ function Student(props) {
       .catch(() => {
         return <Redirect to="/login" />;
       });
-  } else {
-    return <Redirect to="/login" />;
   }
 
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/student/register" exact>
+          <Register history={props.history} endpoint="/api/student/register" />
+        </Route>
+
+        <Route path="/super-admin/register" exact>
           <Register
             history={props.history}
-            endpoint="/api/student/register"
+            endpoint="/api/super-admin/register"
             admin
           />
         </Route>
 
-        <Route path="/student/login" exact>
+        <Route path="/login" exact>
           <Login history={props.history} />
         </Route>
 
-        <Route path="/student/event" exact>
+        <Route path="/event" exact>
           <Header history={props.history} />
           <EventTab history={props.history} />
         </Route>
 
-        <Route path="/student/event/:eid" exact>
+        <Route path="/event/:eid" exact>
           <Header history={props.history} />
           <EventFull history={props.history} />
         </Route>
 
-        <Route path="/student/rso">
+        <Route path="/rso">
           <Header history={props.history} />
           <RsoTab history={props.history} />
         </Route>
 
-        <Route path="/student/university/:uid">
+        <Route path="/university/:uid">
           <Header history={props.history} />
           <University />
         </Route>
 
-        <Route path="/student/university">
+        <Route path="/university">
           <Header history={props.history} />
           <UniversityTab history={props.history} />
         </Route>
 
-        <Route path="/student">
+        <Route path="/">
           <Header history={props.history} />
           <University uid={userData.uid} />
         </Route>

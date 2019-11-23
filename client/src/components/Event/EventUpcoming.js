@@ -23,7 +23,7 @@ function EventUpcomming(props) {
   }, [token]);
 
   const onClickEvent = eid => {
-    props.history.push('/student/event/' + eid);
+    props.history.push('/event/' + eid);
   };
 
   return (

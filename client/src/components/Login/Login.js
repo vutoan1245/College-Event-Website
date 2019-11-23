@@ -53,9 +53,9 @@ const Login = props => {
         });
 
         if (userData.access === 'super admin') {
-          props.history.push('/student/event');
+          props.history.push('/event');
         } else {
-          props.history.push('/student');
+          props.history.push('/');
         }
       })
       .catch(() => {
